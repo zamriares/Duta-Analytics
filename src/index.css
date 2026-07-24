@@ -598,3 +598,43 @@ button {
     padding: 48px 24px;
   }
 }
+
+/* -------------------------------------------------------------
+   Hero 3D Perspective Reveal Animation & Exit Physics
+   ------------------------------------------------------------- */
+.hero {
+  perspective: 1000px;
+  perspective-origin: center center;
+}
+
+.hero .hero__title {
+  opacity: 0;
+  transform: perspective(1000px) translate3d(-120px, 60px, -50px) rotateY(45deg) rotateX(25deg);
+  transition: 
+    opacity 1.5s cubic-bezier(0.16, 1, 0.3, 1), 
+    transform 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.hero.show .hero__title {
+  opacity: 1;
+  transform: perspective(1000px) translate3d(0, 0, 0) rotateY(0deg) rotateX(0deg);
+}
+
+.hero .hero__title span {
+  display: block;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Exit animation for the scroll button on hide */
+.hero.hide .hsbtn-in,
+.hero-scroll-cue.hide {
+  transform: translate3d(0, calc(100% + 7px), 0);
+  opacity: 0;
+  transition: transform 0.35s ease-in, opacity 0.35s ease-in;
+}
+
+.hsbtn-in {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
