@@ -33,9 +33,9 @@ export function FAQSection() {
   };
 
   return (
-    <section className="page-section faq-section" id="faq">
+    <section className="page-section faq-section flow" id="faq">
       <div className="container">
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
+        <div style={{ textAlign: "left", maxWidth: "800px" }}>
           <span className="section-eyebrow">OPERATIONAL CLARITY</span>
           <h2 className="section-title">
             How we work and how we deliver industrial-grade staffing.
@@ -46,7 +46,7 @@ export function FAQSection() {
           {faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
-              <div key={faq.question} className={`faq-item ${isOpen ? "open" : ""}`}>
+              <div key={faq.question} className="faq-item">
                 <button
                   className="faq-trigger"
                   onClick={() => toggle(idx)}
@@ -54,11 +54,11 @@ export function FAQSection() {
                 >
                   <span>{faq.question}</span>
                   <ChevronDown
-                    size={20}
+                    size={18}
                     style={{
                       transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
                       transition: "transform 0.3s ease",
-                      color: isOpen ? "#00f0ff" : "#94a3b8",
+                      color: "var(--text-primary)",
                     }}
                   />
                 </button>

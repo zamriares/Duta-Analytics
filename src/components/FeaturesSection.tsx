@@ -30,9 +30,9 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="page-section features-section" id="features">
+    <section className="page-section features-section flow" id="features">
       <div className="container">
-        <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
+        <div style={{ textAlign: "left", maxWidth: "780px" }}>
           <span className="section-eyebrow">OPERATIONAL LOGISTICS</span>
           <h2 className="section-title">
             Designed for today's operations, beyond legacy staffing workflows.
@@ -45,14 +45,14 @@ export function FeaturesSection() {
             return (
               <motion.div
                 key={feat.title}
-                className="feature-card"
+                className="feature-item"
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.1 * idx, duration: 0.5 }}
+                transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
               >
                 <div className="feature-icon-box">
-                  <Icon size={24} />
+                  <Icon size={20} />
                 </div>
                 <h3 className="feature-title">{feat.title}</h3>
                 <p className="feature-desc">{feat.description}</p>

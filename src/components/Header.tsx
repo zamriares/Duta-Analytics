@@ -3,21 +3,24 @@ export function Header() {
     <header className="vectr-header">
       <a href="#" className="vectr-brand">
         <span className="vectr-brand-dot" />
-        <span>Vectr / Duta Analytics</span>
+        <span>DUTA ANALYTICS</span>
       </a>
 
       <nav className="vectr-nav" aria-label="Main navigation">
-        <a href="#solutions" className="vectr-nav-link">Our Industries</a>
-        <a href="#about" className="vectr-nav-link">Our Mission</a>
-        <a href="#process" className="vectr-nav-link">Process</a>
-        <a href="#features" className="vectr-nav-link">Platform</a>
-        <a href="#faq" className="vectr-nav-link">FAQ</a>
+        <a href="#dashboard" className="vectr-nav-link">Dashboard</a>
+        <a href="#solutions" className="vectr-nav-link">Solutions</a>
+        <a href="#spatial" className="vectr-nav-link">Spatial Intelligence</a>
+        <a href="#digital-twin" className="vectr-nav-link">Digital Twin</a>
+        <a href="#vision" className="vectr-nav-link">Vision AI</a>
+        <a href="#case-studies" className="vectr-nav-link">Case Studies</a>
+        <a href="#about" className="vectr-nav-link">About</a>
       </nav>
 
       <div className="vectr-header-actions">
-        <a href="#cta" className="btn-pill btn-secondary">Apply</a>
-        <a href="#cta" className="btn-pill btn-primary">Request Crews</a>
+        <a href="#dashboard" className="btn-pill btn-secondary">Explore Dashboard</a>
+        <a href="#contact" className="btn-pill btn-primary">Request Demo</a>
       </div>
     </header>
   );
 }
+

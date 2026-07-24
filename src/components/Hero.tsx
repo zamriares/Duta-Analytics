@@ -1,110 +1,147 @@
-import { motion, type Variants } from "framer-motion";
-
-const titleVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    transform: "perspective(1000px) translate3d(-120px, 60px, -50px) rotateY(45deg) rotateX(25deg)",
-  },
-  visible: {
-    opacity: 1,
-    transform: "perspective(1000px) translate3d(0px, 0px, 0px) rotateY(0deg) rotateX(0deg)",
-    transition: {
-      duration: 1.5,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: {
-    opacity: 0,
-    transform: "perspective(1000px) translate3d(-80px, 40px, 0px) rotateY(35deg) rotateX(20deg)",
-  },
-  visible: (i: number) => ({
-    opacity: 1,
-    transform: "perspective(1000px) translate3d(0px, 0px, 0px) rotateY(0deg) rotateX(0deg)",
-    transition: {
-      duration: 1.5,
-      delay: 0.1 * i,
-      ease: [0.16, 1, 0.3, 1] as const,
-    },
-  }),
-};
+import { useEffect, useState, useRef } from "react";
+import { motion } from "framer-motion";
 
 export function Hero() {
+  const [isShow, setIsShow] = useState(false);
+  const [isHideCue, setIsHideCue] = useState(false);
+  const heroRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    // Trigger .show class after mount
+    const timer = setTimeout(() => {
+      setIsShow(true);
+    }, 150);
+
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setIsHideCue(true);
+      } else {
+        setIsHideCue(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const flipVariant = {
+    hidden: { opacity: 0, rotateX: -85, y: 35 },
+    visible: (customDelay: number) => ({
+      opacity: 1,
+      rotateX: 0,
+      y: 0,
+      transition: {
+        duration: 0.95,
+        delay: customDelay,
+        ease: [0.16, 1, 0.3, 1] as const,
+      },
+    }),
+  };
+
   return (
-    <section className="hero-section hero show">
-      <motion.div
-        className="hero-badge"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+    <div className="hero-wrapper">
+      <section
+        ref={heroRef}
+        className={`hero-section hero ${isShow ? "show" : ""} ${isHideCue ? "hide" : ""}`}
+        id="hero"
       >
-        <span>AI DRIVEN SPEED. EXPERT CURATION.</span>
-      </motion.div>
+        {/* Full-width 3D Monowhite Render Background */}
+        <div className="hero-bg-layer">
+          <img
+            src="/assets/hero_industrial_preview.jpg"
+            alt="3D Monowhite Floating Factory Equipment Background"
+            className="hero-bg-img"
+          />
+        </div>
 
-      {/* 3D Hardware Accelerated Typography Reveal */}
-      <motion.h1
-        className="hero-title hero__title"
-        variants={titleVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.span custom={0} variants={lineVariants} style={{ display: "block" }}>
-          The New Standard
-        </motion.span>
-        <motion.span custom={1} variants={lineVariants} style={{ display: "block", color: "#00F0FF" }}>
-          in Staffing
-        </motion.span>
-      </motion.h1>
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", perspective: "1000px" }}>
+          <motion.div
+            className="hero-badge"
+            custom={0.1}
+            initial="hidden"
+            animate={isShow ? "visible" : "hidden"}
+            variants={flipVariant}
+          >
+            <span>OPERATIONAL SAAS &bull; DUTA ANALYTICS</span>
+          </motion.div>
 
-      <motion.p
-        className="hero-subtitle hero__subtitle"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] as const }}
-      >
-        We mobilize verified crews to protect your schedule and your bottom line in high-consequence environments.
-      </motion.p>
+          {/* Cascade 3D Flip Animation Header */}
+          <h1 className="hero-title" style={{ perspective: "1200px" }}>
+            <motion.span
+              style={{
+                display: "block",
+                transformOrigin: "center top",
+                transformStyle: "preserve-3d",
+              }}
+              custom={0.25}
+              initial="hidden"
+              animate={isShow ? "visible" : "hidden"}
+              variants={flipVariant}
+            >
+              Operational Intelligence
+            </motion.span>
+            <motion.span
+              style={{
+                display: "block",
+                color: "var(--text-primary)",
+                transformOrigin: "center top",
+                transformStyle: "preserve-3d",
+              }}
+              custom={0.45}
+              initial="hidden"
+              animate={isShow ? "visible" : "hidden"}
+              variants={flipVariant}
+            >
+              for Factory Control Rooms
+            </motion.span>
+          </h1>
 
-      <motion.div
-        className="hero-actions"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
-      >
-        <a href="#cta" className="btn-pill btn-primary btn-lg">
-          Request Crews
-        </a>
-        <a href="#cta" className="btn-pill btn-secondary btn-lg">
-          Apply
-        </a>
-      </motion.div>
+          <motion.p
+            className="hero-subtitle"
+            custom={0.65}
+            initial="hidden"
+            animate={isShow ? "visible" : "hidden"}
+            variants={flipVariant}
+          >
+            Convert production telemetry, AI computer vision, and spatial GIS into actionable decision workflows across physical sites.
+          </motion.p>
 
-      {/* Scroll button with reveal & exit styling */}
-      <motion.a
-        href="#process"
-        className="hero-scroll-cue hsbtn-in"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6, duration: 1 }}
-      >
-        <span>scroll to discover our process</span>
-        <span className="scroll-arrow">↓</span>
-      </motion.a>
+          <motion.div
+            className="hero-actions"
+            custom={0.8}
+            initial="hidden"
+            animate={isShow ? "visible" : "hidden"}
+            variants={flipVariant}
+          >
+            <a href="#dashboard" className="btn-pill btn-primary">
+              Explore Dashboard
+            </a>
+            <a href="#contact" className="btn-pill btn-secondary">
+              Request Demo
+            </a>
+          </motion.div>
 
-      <motion.div
-        className="hero-preview-container"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] as const }}
-      >
-        <img
-          src="/assets/hero_industrial_preview.jpg"
-          alt="Industrial Operations Command Dashboard"
-          className="hero-preview-img"
-        />
-      </motion.div>
-    </section>
+          {/* Scroll button with reveal & exit physics styling */}
+          <a
+            href="#dashboard"
+            className={`hero-scroll-cue hero__scroll-btn hsbtn-in ${isHideCue ? "hide" : ""}`}
+          >
+            <span>Scroll to explore operational intelligence</span>
+            <span className="scroll-arrow">&darr;</span>
+          </a>
+        </div>
+      </section>
+
+      {/* Hero Spacer providing physical height for Lenis scroll orchestration */}
+      <div className="hero-spacer" aria-hidden="true" />
+    </div>
   );
 }
+
+
+
+

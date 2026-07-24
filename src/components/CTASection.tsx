@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 
 export function CTASection() {
   return (
-    <section className="page-section cta-section" id="cta">
+    <section className="page-section cta-section flow" id="cta">
       <div className="container">
         <div className="cta-box">
           <span className="section-eyebrow">FAST RESPONSE MOBILIZATION</span>
@@ -11,7 +11,7 @@ export function CTASection() {
           </h2>
 
           <div className="cta-actions">
-            <a href="#cta" className="btn-pill btn-primary btn-lg">
+            <a href="#cta" className="btn-pill btn-primary">
               Request Crews
             </a>
           </div>
@@ -19,15 +19,15 @@ export function CTASection() {
           <div className="cta-links">
             <a href="#solutions" className="link-badge">
               <span>Our Industries</span>
-              <ArrowRight size={16} />
+              <ArrowRight size={14} />
             </a>
             <a href="#about" className="link-badge">
               <span>Our Mission</span>
-              <ArrowRight size={16} style={{ color: "#00f0ff" }} />
+              <ArrowRight size={14} />
             </a>
             <a href="#cta" className="link-badge">
-              <span>Apply</span>
-              <ArrowRight size={16} style={{ color: "#00f0ff" }} />
+              <span>Apply Now</span>
+              <ArrowRight size={14} />
             </a>
           </div>
         </div>

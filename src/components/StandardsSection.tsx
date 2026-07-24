@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
-import { ArrowRight, ShieldAlert } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 export function StandardsSection() {
   return (
-    <section className="page-section" id="standards" style={{ background: "#090a0f" }}>
+    <section className="page-section standards-section flow" id="standards">
       <div className="container">
         <div className="standards-banner">
           <img
             src="/assets/nuclear_grade_standards.jpg"
-            alt="Nuclear Grade Industrial Standards"
+            alt="Industrial Control Room Decision Systems"
             className="standards-bg-img"
           />
           <div className="standards-overlay" />
@@ -20,21 +20,21 @@ export function StandardsSection() {
                 alignItems: "center",
                 gap: "8px",
                 padding: "6px 14px",
-                borderRadius: "20px",
-                background: "rgba(0, 240, 255, 0.15)",
-                border: "1px solid rgba(0, 240, 255, 0.3)",
+                border: "0.8px solid var(--border-dark)",
+                background: "rgba(255, 255, 255, 0.05)",
+                fontFamily: "var(--font-mono)",
                 fontSize: "0.75rem",
                 fontWeight: 700,
-                color: "#00f0ff",
-                letterSpacing: "0.1em",
+                color: "var(--text-inverse)",
+                letterSpacing: "0.15em",
                 marginBottom: "20px",
               }}
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <ShieldAlert size={16} />
-              <span>ZERO-FAIL ACCREDITATION</span>
+              <ShieldCheck size={16} />
+              <span>HIGH-CONSEQUENCE SITE RELIABILITY</span>
             </motion.div>
 
             <motion.h2
@@ -44,7 +44,7 @@ export function StandardsSection() {
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              Nuclear-grade standards across every site.
+              Industrial-grade clarity across every site &amp; asset network.
             </motion.h2>
 
             <motion.p
@@ -54,7 +54,7 @@ export function StandardsSection() {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Modeled on nuclear-grade environments, our process enforces badge compliance, protected timelines and zero-error tolerance.
+              Modeled for high-demand physical environments, our decision workflows eliminate reporting latency, connect isolated machine telemetry, and give operators instant operational action.
             </motion.p>
 
             <motion.a
@@ -64,16 +64,19 @@ export function StandardsSection() {
                 alignItems: "center",
                 gap: "10px",
                 fontWeight: 700,
-                color: "#00f0ff",
-                fontSize: "1rem",
+                color: "var(--text-inverse)",
+                fontSize: "0.95rem",
+                letterSpacing: "0.02em",
+                borderBottom: "0.8px solid var(--text-inverse)",
+                paddingBottom: "4px",
               }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
             >
-              <span>Explore our industries</span>
-              <ArrowRight size={18} />
+              <span>Explore our solutions</span>
+              <ArrowRight size={16} />
             </motion.a>
           </div>
         </div>
@@ -81,3 +84,4 @@ export function StandardsSection() {
     </section>
   );
 }
+

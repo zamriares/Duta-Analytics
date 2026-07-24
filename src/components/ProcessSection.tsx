@@ -33,9 +33,9 @@ const steps = [
 
 export function ProcessSection() {
   return (
-    <section className="page-section process-section" id="process">
+    <section className="page-section process-section flow" id="process">
       <div className="container">
-        <div style={{ textAlign: "center", maxWidth: "720px", margin: "0 auto" }}>
+        <div style={{ textAlign: "left", maxWidth: "720px" }}>
           <span className="section-eyebrow">HIGH-TEMPO WORKFLOW</span>
           <h2 className="section-title">Mobilization Engineered for Endurance</h2>
         </div>
@@ -48,7 +48,7 @@ export function ProcessSection() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.1 * idx, duration: 0.5 }}
+              transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
             >
               <div className="step-num">{step.number}</div>
               <h3 className="step-title">{step.title}</h3>
