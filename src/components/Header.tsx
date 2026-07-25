@@ -7,54 +7,52 @@ const navLinks = [
   { label: "Spatial Intelligence", href: "#spatial", id: "spatial" },
   { label: "Digital Twin", href: "#digital-twin", id: "digital-twin" },
   { label: "Vision AI", href: "#vision", id: "vision" },
-  { label: "Case Studies", href: "#case-studies", id: "case-studies" },
   { label: "About", href: "#about", id: "about" },
+  { label: "Case Studies", href: "#case-studies", id: "case-studies" },
 ];
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("#dashboard");
 
-  // Accurate IntersectionObserver Scroll Spy: Highlight section in monitor focal area
+  // Precision Focal Line Scroll Spy: Highlight section covering screen focal Y
   useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: "-20% 0px -40% 0px",
-      threshold: [0.1, 0.3, 0.6],
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+
+      // 1. Top of page fallback
+      if (scrollY < 150) {
+        setActiveNav("#dashboard");
+        return;
+      }
+
+      // 2. Bottom of page fallback
+      if (windowHeight + Math.round(scrollY) >= docHeight - 100) {
+        setActiveNav(navLinks[navLinks.length - 1].href);
+        return;
+      }
+
+      // 3. Focal line at 35% of screen height
+      const focusY = windowHeight * 0.35;
+
+      for (let i = 0; i < navLinks.length; i++) {
+        const el = document.getElementById(navLinks[i].id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= focusY && rect.bottom >= focusY) {
+            setActiveNav(navLinks[i].href);
+            break;
+          }
+        }
+      }
     };
 
-    const sectionEntries = new Map<string, number>();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          sectionEntries.set(entry.target.id, entry.intersectionRatio);
-        } else {
-          sectionEntries.delete(entry.target.id);
-        }
-      });
-
-      let mostVisibleId = "";
-      let highestRatio = -1;
-
-      sectionEntries.forEach((ratio, id) => {
-        if (ratio > highestRatio) {
-          highestRatio = ratio;
-          mostVisibleId = id;
-        }
-      });
-
-      if (mostVisibleId) {
-        setActiveNav(`#${mostVisibleId}`);
-      }
-    }, observerOptions);
-
-    navLinks.forEach((link) => {
-      const el = document.getElementById(link.id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -63,7 +61,7 @@ export function Header() {
         <span>DUTA ANALYTICS</span>
       </a>
 
-      {/* Desktop Navigation Links with Viewport-Focused Active Indicator */}
+      {/* Desktop Navigation Links with Active Scroll Indicator */}
       <nav className="vectr-nav" aria-label="Main navigation">
         {navLinks.map((link) => {
           const isSelected = activeNav === link.href;
