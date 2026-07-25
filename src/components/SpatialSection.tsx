@@ -35,15 +35,21 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      whileHover={{ y: -6, scale: 1.015 }}
+      transition={{
+        delay: 0.08 * idx,
+        type: "spring",
+        stiffness: 400,
+        damping: 22,
+      }}
       onClick={() => setIsOpen((prev) => !prev)}
       style={{
-        padding: "20px 0",
+        padding: "20px 0 24px 0",
         background: "transparent",
         border: "none",
+        borderBottom: isOpen ? "2.5px solid #000000" : "1px solid #666666",
         boxShadow: "none",
         cursor: "pointer",
-        transition: "all 0.25s ease",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
@@ -64,7 +70,7 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
             borderRadius: "4px",
             background: "transparent",
             border: "none",
-            color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
+            color: isOpen ? "#000000" : "var(--text-secondary)",
             transition: "all 0.2s ease",
           }}
         >
@@ -133,6 +139,7 @@ export function SpatialSection() {
                 padding: "20px 0",
                 background: "transparent",
                 border: "none",
+                borderBottom: "1px solid #666666",
               }}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}

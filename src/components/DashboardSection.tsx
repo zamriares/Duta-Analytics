@@ -31,15 +31,23 @@ function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: Me
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div
+    <motion.div
       className="feature-item"
+      whileHover={{ y: -4, scale: 1.01 }}
+      transition={{
+        type: "spring",
+        stiffness: 400,
+        damping: 22,
+      }}
+      onClick={() => setIsOpen((prev) => !prev)}
       style={{
-        padding: "20px 0",
+        padding: "16px 0 20px 0",
         background: "transparent",
         position: "relative",
-        transition: "all 0.25s ease",
         border: "none",
+        borderBottom: isOpen ? "2.5px solid #000000" : "1px solid #666666",
         boxShadow: "none",
+        cursor: "pointer",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -90,7 +98,7 @@ function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: Me
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 }
 
