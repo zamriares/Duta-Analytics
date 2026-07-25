@@ -5,7 +5,7 @@ import {
   Eye,
   MapPin,
   Boxes,
-  Info,
+  ChevronDown,
 } from "lucide-react";
 
 const solutionCards = [
@@ -46,27 +46,24 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      onClick={() => setIsOpen((prev) => !prev)}
       style={{
         padding: "24px",
         background: "var(--bg-secondary)",
         borderRadius: "4px",
         border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
         boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        cursor: "pointer",
         transition: "all 0.25s ease",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
         <div className="feature-icon-box" style={{ marginBottom: 0 }}>
           <Icon size={20} />
         </div>
 
-        {/* Icon Click Button to Toggle Secondary Content */}
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
-          }}
-          title="Click to view secondary details"
+        <div
+          title="Click card to toggle content text"
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -79,57 +76,51 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
             background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
             border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
             color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
-            cursor: "pointer",
             transition: "all 0.2s ease",
           }}
         >
-          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
-          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
-        </button>
+          <span>{isOpen ? "CLOSE" : "EXPAND"}</span>
+          <ChevronDown size={14} style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }} />
+        </div>
       </div>
 
-      {/* Main Title & Description ALWAYS Visible */}
-      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      {/* ONLY TITLE VISIBLE BY DEFAULT */}
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {sol.title}
       </h3>
-      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
-        {sol.desc}
-      </p>
 
-      {/* Secondary Content: Expanded Bullet Features Revealed on Icon Click */}
+      {/* CONTENT TEXT APPEARS ON CLICK */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0, marginTop: 0 }}
-            animate={{ opacity: 1, height: "auto", marginTop: 16 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 14 }}
             exit={{ opacity: 0, height: 0, marginTop: 0 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div style={{ paddingTop: "12px", borderTop: "1px dashed var(--border-subtle)" }}>
-              <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", fontWeight: 700, marginBottom: "8px", letterSpacing: "0.08em" }}>
-                SECONDARY SYSTEM SPECIFICATIONS:
-              </div>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-                {sol.bullets.map((b) => (
-                  <li
-                    key={b}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      fontSize: "0.85rem",
-                      color: "var(--text-primary)",
-                      marginBottom: "8px",
-                      fontFamily: "var(--font-mono)",
-                    }}
-                  >
-                    <span style={{ width: "5px", height: "5px", background: "var(--accent-cyan)", borderRadius: "50%", flexShrink: 0 }} />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p className="feature-desc" style={{ marginBottom: "14px", fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+              {sol.desc}
+            </p>
+            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+              {sol.bullets.map((b) => (
+                <li
+                  key={b}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "0.85rem",
+                    color: "var(--text-primary)",
+                    marginBottom: "8px",
+                    fontFamily: "var(--font-mono)",
+                  }}
+                >
+                  <span style={{ width: "5px", height: "5px", background: "var(--accent-cyan)", borderRadius: "50%", flexShrink: 0 }} />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
           </motion.div>
         )}
       </AnimatePresence>

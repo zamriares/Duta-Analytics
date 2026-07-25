@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TrendingUp, ShieldCheck, Zap, Info } from "lucide-react";
+import { TrendingUp, ShieldCheck, Zap, ChevronDown } from "lucide-react";
 
 const caseStudies = [
   {
@@ -8,21 +8,18 @@ const caseStudies = [
     title: "Precision Machining Plant (Kuala Lumpur)",
     metric: "+14.2% OEE Gain",
     desc: "Integrated telemetry from 45 CNC machines into real-time control room dashboards, reducing micro-stoppages by 38% in 60 days.",
-    secondary: "Implementation timeline: 6 weeks. Connected 45 Fanuc & Siemens CNC PLCs via Kepware OPC-UA server cluster.",
   },
   {
     icon: Zap,
     title: "Automated Welding Bay (Penang)",
     metric: "99.4% Defect Detection",
     desc: "Deployed edge AI computer vision inspection on robotic welding arms, eliminating manual quality audits and scrap rework.",
-    secondary: "Edge AI deployment: 4 NVIDIA Jetson Orin AGX units processing 60 FPS multi-angle camera streams.",
   },
   {
     icon: ShieldCheck,
     title: "Semiconductor Assembly Facility (Selangor)",
     metric: "-42% Downtime Loss",
     desc: "Implemented predictive vibration and thermal digital twin alerts, preventing 18 catastrophic spindle failures this year.",
-    secondary: "Predictive ROI: $148,000 direct annual savings in bearing replacement & unplanned line stoppage costs.",
   },
 ];
 
@@ -37,16 +34,18 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      onClick={() => setIsOpen((prev) => !prev)}
       style={{
         padding: "24px",
         background: "var(--bg-secondary)",
         borderRadius: "4px",
         border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
         boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        cursor: "pointer",
         transition: "all 0.25s ease",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <div className="feature-icon-box" style={{ marginBottom: 0 }}>
             <Icon size={20} />
@@ -56,12 +55,8 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
           </span>
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
-          }}
-          title="Click to toggle secondary details"
+        <div
+          title="Click card to toggle content text"
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -74,23 +69,20 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
             background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
             border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
             color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
-            cursor: "pointer",
             transition: "all 0.2s ease",
           }}
         >
-          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
-          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
-        </button>
+          <span>{isOpen ? "CLOSE" : "EXPAND"}</span>
+          <ChevronDown size={14} style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }} />
+        </div>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      {/* ONLY TITLE VISIBLE BY DEFAULT */}
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {cs.title}
       </h3>
-      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
-        {cs.desc}
-      </p>
 
-      {/* Secondary Content: Appears strictly on icon click */}
+      {/* CONTENT TEXT APPEARS ON CLICK */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -100,9 +92,9 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div style={{ paddingTop: "10px", borderTop: "1px dashed var(--border-subtle)", fontSize: "0.84rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
-              &rsaquo; {cs.secondary}
-            </div>
+            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+              {cs.desc}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>

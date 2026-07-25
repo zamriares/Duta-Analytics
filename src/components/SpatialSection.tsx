@@ -1,31 +1,27 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Layers, Map, Navigation, Compass, Info } from "lucide-react";
+import { Layers, Map, Navigation, Compass, ChevronDown } from "lucide-react";
 
 const spatialCapabilities = [
   {
     icon: Layers,
     title: "Geospatial Asset Layers",
     desc: "Overlay physical machinery, power conduits, and sensor nodes on high-resolution CAD and GIS site plans.",
-    secondary: "Supports CAD DWG/DXF import, GeoJSON vector layers, and coordinate auto-projection.",
   },
   {
     icon: Map,
     title: "Multi-Facility Fleet Map",
     desc: "Track regional plants, logistics routes, and supply chain status across geographic locations in a single view.",
-    secondary: "Global GIS map view with sub-second sync across regional plant sites.",
   },
   {
     icon: Navigation,
     title: "AGV & Mobile Asset Tracking",
     desc: "Monitor real-time positions, battery levels, and route efficiency of automated guided vehicles across the factory floor.",
-    secondary: "Ultra-wideband (UWB) indoor positioning with 10cm spatial accuracy.",
   },
   {
     icon: Compass,
     title: "Environmental Heatmaps",
     desc: "Visualize temperature gradients, noise levels, and air quality telemetry spatially across factory bays.",
-    secondary: "Kriging spatial interpolation for continuous environmental gradient heatmaps.",
   },
 ];
 
@@ -40,26 +36,24 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      onClick={() => setIsOpen((prev) => !prev)}
       style={{
         padding: "24px",
         background: "var(--bg-secondary)",
         borderRadius: "4px",
         border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
         boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        cursor: "pointer",
         transition: "all 0.25s ease",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
         <div className="feature-icon-box" style={{ marginBottom: 0 }}>
           <Icon size={20} />
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
-          }}
-          title="Click to toggle secondary details"
+        <div
+          title="Click card to toggle content text"
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -72,23 +66,20 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
             background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
             border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
             color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
-            cursor: "pointer",
             transition: "all 0.2s ease",
           }}
         >
-          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
-          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
-        </button>
+          <span>{isOpen ? "CLOSE" : "EXPAND"}</span>
+          <ChevronDown size={14} style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }} />
+        </div>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      {/* ONLY TITLE VISIBLE BY DEFAULT */}
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {cap.title}
       </h3>
-      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
-        {cap.desc}
-      </p>
 
-      {/* Secondary Content: Appears strictly on icon click */}
+      {/* CONTENT TEXT APPEARS ON CLICK */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -98,9 +89,9 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div style={{ paddingTop: "10px", borderTop: "1px dashed var(--border-subtle)", fontSize: "0.84rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
-              &rsaquo; {cap.secondary}
-            </div>
+            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+              {cap.desc}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,31 +1,27 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Box, Cpu, RefreshCw, Eye, Info } from "lucide-react";
+import { Box, Cpu, RefreshCw, Eye, ChevronDown } from "lucide-react";
 
 const digitalTwinFeatures = [
   {
     icon: Box,
     title: "Interactive WebGL 3D Models",
     desc: "Lightweight 3D representations of production equipment rendered smoothly in web browsers using Three.js.",
-    secondary: "GLTF/GLB compression with LOD (Level of Detail) mesh optimization.",
   },
   {
     icon: Cpu,
     title: "Sensor-Linked Mesh States",
     desc: "3D geometry components dynamically change color, pulse, or animate based on live PLC temperature and vibration metrics.",
-    secondary: "Real-time shader materials linked directly to WebSocket telemetry streams.",
   },
   {
     icon: RefreshCw,
     title: "Predictive Wear Simulation",
     desc: "Simulate mechanical stress and thermal fatigue on digital twin components to plan maintenance before failure occurs.",
-    secondary: "Finite Element Method (FEM) fatigue modeling with historical lifespan projection.",
   },
   {
     icon: Eye,
     title: "Spatial AR & VR Readiness",
     desc: "Export 3D twin scenes to augmented reality headsets for technician guidance during complex repair procedures.",
-    secondary: "WebXR & OpenXR compatible for hands-free maintenance walkthroughs.",
   },
 ];
 
@@ -40,26 +36,24 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      onClick={() => setIsOpen((prev) => !prev)}
       style={{
         padding: "24px",
         background: "var(--bg-secondary)",
         borderRadius: "4px",
         border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
         boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        cursor: "pointer",
         transition: "all 0.25s ease",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "14px" }}>
         <div className="feature-icon-box" style={{ marginBottom: 0 }}>
           <Icon size={20} />
         </div>
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen((prev) => !prev);
-          }}
-          title="Click to toggle secondary details"
+        <div
+          title="Click card to toggle content text"
           style={{
             display: "inline-flex",
             alignItems: "center",
@@ -72,23 +66,20 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
             background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
             border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
             color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
-            cursor: "pointer",
             transition: "all 0.2s ease",
           }}
         >
-          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
-          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
-        </button>
+          <span>{isOpen ? "CLOSE" : "EXPAND"}</span>
+          <ChevronDown size={14} style={{ transform: isOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }} />
+        </div>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      {/* ONLY TITLE VISIBLE BY DEFAULT */}
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {feature.title}
       </h3>
-      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
-        {feature.desc}
-      </p>
 
-      {/* Secondary Content: Appears strictly on icon click */}
+      {/* CONTENT TEXT APPEARS ON CLICK */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -98,9 +89,9 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div style={{ paddingTop: "10px", borderTop: "1px dashed var(--border-subtle)", fontSize: "0.84rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
-              &rsaquo; {feature.secondary}
-            </div>
+            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+              {feature.desc}
+            </p>
           </motion.div>
         )}
       </AnimatePresence>
