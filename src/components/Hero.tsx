@@ -121,33 +121,33 @@ export function Hero() {
         >
           <span>scroll to start</span>
 
-          {/* Triple Stacked Arrowhead with Continuous Blink Wave */}
+          {/* 7 Stacked Black Arrowheads with Continuous Wave Blink */}
           <div
             style={{
               display: "inline-flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              height: "36px",
+              height: "75px",
             }}
           >
-            {[0, 1, 2].map((idx) => (
+            {[0, 1, 2, 3, 4, 5, 6].map((idx) => (
               <motion.div
                 key={idx}
-                animate={{ opacity: [0.2, 1, 0.2] }}
+                animate={{ opacity: [0.15, 1, 0.15] }}
                 transition={{
-                  duration: 1.2,
+                  duration: 1.4,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: idx * 0.2,
+                  delay: idx * 0.14,
                 }}
                 style={{
-                  marginTop: idx > 0 ? "-11px" : "0px",
+                  marginTop: idx > 0 ? "-15px" : "0px",
                   display: "flex",
                   alignItems: "center",
                 }}
               >
-                <ChevronDown size={18} color="var(--accent-cyan, #00f0ff)" />
+                <ChevronDown size={24} color="#000000" strokeWidth={2.5} />
               </motion.div>
             ))}
           </div>
