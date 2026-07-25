@@ -482,7 +482,7 @@ export function VisionSection() {
         </div>
 
         {/* Industries Served */}
-        <div style={{ marginTop: "56px" }}>
+        <div style={{ marginTop: "96px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">TARGET OPERATIONAL ENVIRONMENTS</span>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "16px" }}>
             {industries.map((ind) => (
