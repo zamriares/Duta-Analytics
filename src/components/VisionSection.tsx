@@ -2,7 +2,6 @@ import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
-  ArrowRight,
   Play,
   Pause,
   Volume2,
@@ -19,6 +18,7 @@ import {
   Gauge,
   Boxes,
   Zap,
+  ChevronRight,
 } from "lucide-react";
 
 const visionCapabilities = [
@@ -440,26 +440,42 @@ export function VisionSection() {
             style={{
               display: "flex",
               flexWrap: "wrap",
-              gap: "12px",
+              gap: "16px 20px",
               marginTop: "28px",
               alignItems: "center",
             }}
           >
             {visionWorkflow.map((w, idx) => (
-              <div key={w} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div key={w} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
                 <span
                   style={{
-                    padding: "10px 18px",
-                    background: "var(--bg-primary)",
-                    border: "0.8px solid var(--border-strong)",
-                    fontSize: "0.85rem",
+                    padding: "10px 0",
+                    background: "transparent",
+                    border: "none",
+                    borderBottom: "1px solid #666666",
+                    fontSize: "0.92rem",
                     fontWeight: 700,
                     fontFamily: "var(--font-mono)",
+                    color: "var(--text-primary)",
                   }}
                 >
                   {w}
                 </span>
-                {idx < visionWorkflow.length - 1 && <ArrowRight size={16} color="var(--text-muted)" />}
+
+                {idx < visionWorkflow.length - 1 && (
+                  <motion.div
+                    animate={{ opacity: [0.2, 1, 0.2], scale: [0.9, 1.15, 0.9] }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: idx * 0.2,
+                    }}
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <ChevronRight size={22} color="var(--accent-cyan)" />
+                  </motion.div>
+                )}
               </div>
             ))}
           </div>
