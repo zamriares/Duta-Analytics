@@ -48,11 +48,10 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
       onClick={() => setIsOpen((prev) => !prev)}
       style={{
-        padding: "24px",
-        background: "var(--bg-secondary)",
-        borderRadius: "4px",
-        border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
-        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        padding: "20px 0",
+        background: "transparent",
+        border: "none",
+        boxShadow: "none",
         cursor: "pointer",
         transition: "all 0.25s ease",
       }}
@@ -172,10 +171,9 @@ export function SolutionsSection() {
               <div
                 key={st.step}
                 style={{
-                  padding: "24px",
-                  background: "var(--bg-secondary)",
-                  borderRadius: "4px",
-                  border: "0.8px solid var(--border-subtle)",
+                  padding: "20px 0",
+                  background: "transparent",
+                  border: "none",
                 }}
               >
                 <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}>

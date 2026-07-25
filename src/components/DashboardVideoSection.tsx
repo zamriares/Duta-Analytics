@@ -206,7 +206,7 @@ export function DashboardVideoSection() {
             marginInline: "auto",
           }}
         >
-          <div className="feature-item" style={{ padding: "20px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
+          <div className="feature-item" style={{ padding: "20px 0", background: "transparent", border: "none" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
               <Activity size={18} color="var(--accent-cyan)" />
               <strong style={{ fontSize: "0.95rem", fontFamily: "var(--font-heading)" }}>Sub-30ms Live Telemetry</strong>
@@ -216,7 +216,7 @@ export function DashboardVideoSection() {
             </p>
           </div>
 
-          <div className="feature-item" style={{ padding: "20px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
+          <div className="feature-item" style={{ padding: "20px 0", background: "transparent", border: "none" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
               <Zap size={18} color="var(--accent-blue)" />
               <strong style={{ fontSize: "0.95rem", fontFamily: "var(--font-heading)" }}>AI Neural Overlay</strong>
@@ -226,7 +226,7 @@ export function DashboardVideoSection() {
             </p>
           </div>
 
-          <div className="feature-item" style={{ padding: "20px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
+          <div className="feature-item" style={{ padding: "20px 0", background: "transparent", border: "none" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
               <ShieldCheck size={18} color="rgb(0, 180, 100)" />
               <strong style={{ fontSize: "0.95rem", fontFamily: "var(--font-heading)" }}>Nuclear-Grade Reliability</strong>

@@ -34,13 +34,12 @@ function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: Me
     <div
       className="feature-item"
       style={{
-        padding: "24px",
-        background: "var(--bg-secondary)",
-        borderRadius: "4px",
+        padding: "20px 0",
+        background: "transparent",
         position: "relative",
         transition: "all 0.25s ease",
-        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        border: "none",
+        boxShadow: "none",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

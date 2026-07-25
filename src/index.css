@@ -515,15 +515,14 @@ main.main-content {
 }
 
 .feature-item {
-  border-bottom: 0.8px solid rgb(230, 230, 232);
+  border: none;
   background: transparent;
-  padding: 0 0 48px;
+  padding: 0 0 24px;
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
 .feature-item:hover {
   transform: translateY(-3px);
-  border-bottom-color: var(--text-primary);
 }
 
 .feature-item .feature-icon-box {
