@@ -72,8 +72,8 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
             fontFamily: "var(--font-mono)",
             fontWeight: 700,
             borderRadius: "4px",
-            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
-            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            background: "transparent",
+            border: "none",
             color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
             transition: "all 0.2s ease",
           }}

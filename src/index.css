@@ -533,8 +533,8 @@ main.main-content {
   justify-content: center;
   margin-bottom: var(--space-md);
   color: var(--text-primary);
-  border: 0.8px solid var(--border-subtle);
-  background: var(--bg-secondary);
+  border: none;
+  background: transparent;
 }
 
 .feature-item .feature-title {
