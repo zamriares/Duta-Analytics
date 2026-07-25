@@ -6,6 +6,7 @@ export function ContactSection() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [honeypot, setHoneypot] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -18,6 +19,14 @@ export function ContactSection() {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage(null);
+
+    // Honeypot anti-spam: if the hidden field was filled, silently fake success
+    if (honeypot) {
+      await new Promise((r) => setTimeout(r, 800));
+      setSubmitted(true);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       const response = await fetch("https://formspree.io/f/mzdwqwpw", {
@@ -39,8 +48,7 @@ export function ContactSection() {
           setErrorMessage("Failed to send inquiry. Please check your inputs and try again.");
         }
       }
-    } catch (err) {
-      console.error("Formspree submission error:", err);
+    } catch {
       setErrorMessage("Network error. Please check your internet connection and try again.");
     } finally {
       setIsSubmitting(false);
@@ -99,6 +107,32 @@ export function ContactSection() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "grid", gap: "20px" }}>
+              {/* Honeypot anti-spam trap — invisible to real users, auto-filled by bots */}
+              <div
+                aria-hidden="true"
+                style={{
+                  position: "absolute",
+                  left: "-9999px",
+                  top: "-9999px",
+                  width: 0,
+                  height: 0,
+                  overflow: "hidden",
+                  opacity: 0,
+                  pointerEvents: "none",
+                }}
+              >
+                <label htmlFor="contact-phone">Phone</label>
+                <input
+                  id="contact-phone"
+                  name="phone"
+                  type="text"
+                  autoComplete="off"
+                  tabIndex={-1}
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                />
+              </div>
+
               {errorMessage && (
                 <div
                   style={{

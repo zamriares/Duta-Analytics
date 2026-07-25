@@ -95,8 +95,6 @@ export function Hero3DScene() {
     // 5. GLTFLoader: Load 3D model with auto-centering & scale-normalization
     const loader = new GLTFLoader();
     const modelPaths = [
-      "./public/hero-model.glb",
-      "/hero-model.glb",
       "/assets/hero-model.glb",
     ];
 

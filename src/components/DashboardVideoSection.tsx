@@ -113,11 +113,8 @@ export function DashboardVideoSection() {
               loop
               muted={isMuted}
               playsInline
-              onError={(e) => {
-                const target = e.currentTarget;
-                if (target.src.includes("/assets/")) {
-                  target.src = "/dashboard_video.mp4";
-                }
+              onError={() => {
+                // Video failed to load — no fallback available
               }}
               style={{
                 width: "100%",

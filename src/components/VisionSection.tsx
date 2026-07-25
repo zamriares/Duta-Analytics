@@ -300,8 +300,8 @@ export function VisionSection() {
                 maxHeight: "600px",
                 objectFit: "cover",
               }}
-              onError={(e) => {
-                e.currentTarget.src = "/vision_intel_video.mp4";
+              onError={() => {
+                // Video failed to load — no fallback available
               }}
             />
 

@@ -115,7 +115,7 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
       };
 
       img.onerror = () => {
-        img.src = `/frames/frame_${frameNum}.webp`;
+        // Frame failed to load — no fallback available
       };
 
       loadedImages.push(img);
