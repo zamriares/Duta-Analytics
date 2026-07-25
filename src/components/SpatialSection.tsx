@@ -162,6 +162,81 @@ export function SpatialSection() {
             <SpatialCard key={cap.title} cap={cap} idx={idx} />
           ))}
         </div>
+
+        {/* Spatial GIS Site Intelligence Showcase Map Graphic at the Bottom */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          style={{
+            marginTop: "64px",
+            borderRadius: "6px",
+            overflow: "hidden",
+            border: "1px solid var(--border-subtle)",
+            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
+            background: "var(--bg-secondary)",
+          }}
+        >
+          {/* Header Control Bar */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              padding: "12px 20px",
+              background: "var(--bg-secondary)",
+              borderBottom: "1px solid var(--border-subtle)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.8rem",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff5f56" }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27c93f" }} />
+              <span style={{ color: "var(--text-secondary)", marginLeft: "12px" }}>
+                SPATIAL GIS CONTROL ROOM &bull; SITE MAP OVERLAY
+              </span>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <span
+                style={{
+                  padding: "3px 10px",
+                  borderRadius: "12px",
+                  background: "rgba(0, 240, 255, 0.15)",
+                  color: "var(--accent-cyan)",
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--accent-cyan)" }} />
+                LIVE GIS MESH STREAM
+              </span>
+            </div>
+          </div>
+
+          {/* Image Showcase Container */}
+          <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+            <img
+              src="/assets/spatial_gis_map.jpg"
+              alt="Spatial GIS & Site Intelligence Map Interface"
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                objectFit: "cover",
+              }}
+              onError={(e) => {
+                e.currentTarget.src = "/spatial_gis_map.jpg";
+              }}
+            />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
