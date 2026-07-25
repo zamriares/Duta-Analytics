@@ -7,6 +7,7 @@ import { TechCanvas } from "./components/TechCanvas";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { DashboardSection } from "./components/DashboardSection";
+import { DashboardVideoSection } from "./components/DashboardVideoSection";
 import { SolutionsSection } from "./components/SolutionsSection";
 import { SpatialSection } from "./components/SpatialSection";
 import { DigitalTwinSection } from "./components/DigitalTwinSection";
@@ -89,6 +90,7 @@ export function App() {
       <Hero />
       <main className="main-content">
         <DashboardSection />
+        <DashboardVideoSection />
         <SolutionsSection />
         <SpatialSection />
         <DigitalTwinSection />
