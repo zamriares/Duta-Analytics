@@ -1,4 +1,6 @@
 import { useState, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { HeroFrameCanvas } from "./HeroFrameCanvas";
 
 export function Hero() {
@@ -94,7 +96,7 @@ export function Hero() {
         </div>
       </div>
 
-      {/* CONSTANTLY VISIBLE Scroll Instruction Cue - Bottom Left Positioned */}
+      {/* CONSTANTLY VISIBLE Scroll Instruction Cue with Triple Stacked Blinking Arrowheads */}
       <div
         style={{
           position: "absolute",
@@ -111,10 +113,44 @@ export function Hero() {
           style={{
             fontSize: "1.05rem",
             letterSpacing: "0.12em",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "10px",
+            textDecoration: "none",
           }}
         >
           <span>scroll to start</span>
-          <span className="scroll-arrow" style={{ fontSize: "1.25rem" }}>&darr;</span>
+
+          {/* Triple Stacked Arrowhead with Continuous Blink Wave */}
+          <div
+            style={{
+              display: "inline-flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "36px",
+            }}
+          >
+            {[0, 1, 2].map((idx) => (
+              <motion.div
+                key={idx}
+                animate={{ opacity: [0.2, 1, 0.2] }}
+                transition={{
+                  duration: 1.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: idx * 0.2,
+                }}
+                style={{
+                  marginTop: idx > 0 ? "-11px" : "0px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <ChevronDown size={18} color="var(--accent-cyan, #00f0ff)" />
+              </motion.div>
+            ))}
+          </div>
         </a>
       </div>
     </section>
