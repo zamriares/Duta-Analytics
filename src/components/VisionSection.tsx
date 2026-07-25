@@ -11,19 +11,27 @@ import {
   Eye,
   ShieldCheck,
   Cpu,
+  Scan,
+  AlertOctagon,
+  HardHat,
+  Activity,
+  Calculator,
+  Gauge,
+  Boxes,
+  Zap,
 } from "lucide-react";
 
 const visionCapabilities = [
-  "Quality Inspection",
-  "Defect Detection",
-  "PPE Compliance",
-  "Worker Safety",
-  "Machine Monitoring",
-  "Equipment Health",
-  "Production Counting",
-  "OCR & Gauge Reading",
-  "Inventory Monitoring",
-  "Anomaly Detection",
+  { label: "Quality Inspection", icon: Scan, color: "var(--accent-cyan)" },
+  { label: "Defect Detection", icon: AlertOctagon, color: "rgb(255, 170, 0)" },
+  { label: "PPE Compliance", icon: HardHat, color: "var(--accent-blue)" },
+  { label: "Worker Safety", icon: ShieldCheck, color: "rgb(0, 180, 100)" },
+  { label: "Machine Monitoring", icon: Cpu, color: "var(--accent-cyan)" },
+  { label: "Equipment Health", icon: Activity, color: "rgb(0, 180, 100)" },
+  { label: "Production Counting", icon: Calculator, color: "var(--accent-blue)" },
+  { label: "OCR & Gauge Reading", icon: Gauge, color: "var(--accent-cyan)" },
+  { label: "Inventory Monitoring", icon: Boxes, color: "var(--accent-blue)" },
+  { label: "Anomaly Detection", icon: Zap, color: "rgb(255, 60, 60)" },
 ];
 
 const visionWorkflow = [
@@ -380,40 +388,44 @@ export function VisionSection() {
           </div>
         </motion.div>
 
-        {/* 10 Vision Capabilities Grid */}
+        {/* 10 Vision Capabilities Grid with Unique Icons, Borderless & Main Background */}
         <div style={{ marginTop: "56px" }}>
           <span className="section-eyebrow">AUTOMATED DIGITAL SENSOR CAPABILITIES</span>
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-              gap: "16px",
-              marginTop: "20px",
+              gap: "20px 24px",
+              marginTop: "24px",
             }}
           >
-            {visionCapabilities.map((cap, idx) => (
-              <motion.div
-                key={cap}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.05 * idx }}
-                style={{
-                  padding: "16px 20px",
-                  background: "var(--bg-secondary)",
-                  border: "0.8px solid var(--border-subtle)",
-                  borderRadius: "4px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                }}
-              >
-                <CheckCircle2 size={16} color="var(--accent-blue)" />
-                <span>{cap}</span>
-              </motion.div>
-            ))}
+            {visionCapabilities.map((item, idx) => {
+              const IconComponent = item.icon;
+              return (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.05 * idx }}
+                  whileHover={{ y: -4, scale: 1.015 }}
+                  style={{
+                    padding: "16px 0",
+                    background: "transparent",
+                    border: "none",
+                    borderBottom: "1px solid #666666",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    fontSize: "0.92rem",
+                    fontWeight: 600,
+                  }}
+                >
+                  <IconComponent size={18} color={item.color} />
+                  <span>{item.label}</span>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
