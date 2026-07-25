@@ -228,8 +228,8 @@ h2 {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border-bottom: none;
+  box-shadow: none;
   transition: all 0.3s ease;
 }
 
@@ -245,14 +245,6 @@ h2 {
   text-decoration: none;
 }
 
-.vectr-brand-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #0066ff;
-  box-shadow: 0 0 8px #0066ff;
-}
-
 .vectr-nav {
   display: flex;
   align-items: center;
@@ -263,13 +255,17 @@ h2 {
   font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #334155;
+  color: #475569;
   text-decoration: none;
-  transition: color 0.2s ease;
+  padding: 6px 0;
+  border-bottom: 1px solid #cbd5e1;
+  transition: all 0.2s ease;
 }
 
-.vectr-nav-link:hover {
-  color: #0066ff;
+.vectr-nav-link:hover,
+.vectr-nav-link.active {
+  color: #000000;
+  border-bottom: 2.5px solid #000000;
 }
 
 .vectr-header-actions {
