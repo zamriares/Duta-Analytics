@@ -1,19 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
+
+const navLinks = [
+  { label: "Dashboard", href: "#dashboard", id: "dashboard" },
+  { label: "Solutions", href: "#solutions", id: "solutions" },
+  { label: "Spatial Intelligence", href: "#spatial", id: "spatial" },
+  { label: "Digital Twin", href: "#digital-twin", id: "digital-twin" },
+  { label: "Vision AI", href: "#vision", id: "vision" },
+  { label: "Case Studies", href: "#case-studies", id: "case-studies" },
+  { label: "About", href: "#about", id: "about" },
+];
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("#dashboard");
 
-  const navLinks = [
-    { label: "Dashboard", href: "#dashboard" },
-    { label: "Solutions", href: "#solutions" },
-    { label: "Spatial Intelligence", href: "#spatial" },
-    { label: "Digital Twin", href: "#digital-twin" },
-    { label: "Vision AI", href: "#vision" },
-    { label: "Case Studies", href: "#case-studies" },
-    { label: "About", href: "#about" },
-  ];
+  // Scroll Spy: Synchronize active header nav link with page scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 140; // 140px header offset buffer
+
+      for (let i = navLinks.length - 1; i >= 0; i--) {
+        const sectionEl = document.getElementById(navLinks[i].id);
+        if (sectionEl) {
+          const sectionTop = sectionEl.offsetTop;
+          if (scrollPosition >= sectionTop) {
+            setActiveNav(navLinks[i].href);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Trigger initial scroll check on load
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <header className="vectr-header">
@@ -21,7 +44,7 @@ export function Header() {
         <span>DUTA ANALYTICS</span>
       </a>
 
-      {/* Desktop Navigation Links with Bottom Accent Line */}
+      {/* Desktop Navigation Links with Active Scroll Indicator */}
       <nav className="vectr-nav" aria-label="Main navigation">
         {navLinks.map((link) => {
           const isSelected = activeNav === link.href;
@@ -57,7 +80,7 @@ export function Header() {
         {isMobileMenuOpen ? <X size={26} color="#090A0F" /> : <Menu size={26} color="#090A0F" />}
       </button>
 
-      {/* Mobile Navigation Dropdown Menu with White Background */}
+      {/* Mobile Navigation Dropdown Menu */}
       {isMobileMenuOpen && (
         <div
           className="mobile-nav-dropdown"
