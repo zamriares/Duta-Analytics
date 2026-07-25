@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Send, CheckCircle2 } from "lucide-react";
+import { Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 export function ContactSection() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,9 +14,37 @@ export function ContactSection() {
     message: "",
   });
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("https://formspree.io/f/mzdwqwpw", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json().catch(() => ({}));
+        if (data && data.errors) {
+          setErrorMessage(data.errors.map((err: any) => err.message).join(", "));
+        } else {
+          setErrorMessage("Failed to send inquiry. Please check your inputs and try again.");
+        }
+      }
+    } catch (err) {
+      console.error("Formspree submission error:", err);
+      setErrorMessage("Network error. Please check your internet connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,11 +94,30 @@ export function ContactSection() {
                 Inquiry Received
               </h3>
               <p className="feature-desc" style={{ marginTop: "8px" }}>
-                Thank you. An operational specialist from Duta Analytics will review your requirements and reach out within 24 hours.
+                Thank you. Your inquiry has been submitted successfully via Formspree to Duta Analytics. Our operational team will review your requirements and reach out within 24 hours.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} style={{ display: "grid", gap: "20px" }}>
+              {errorMessage && (
+                <div
+                  style={{
+                    padding: "12px 16px",
+                    borderRadius: "4px",
+                    background: "rgba(255, 60, 60, 0.12)",
+                    border: "1px solid rgba(255, 60, 60, 0.4)",
+                    color: "rgb(255, 80, 80)",
+                    fontSize: "0.88rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
+                  <AlertCircle size={18} />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
                 <div>
                   <label
@@ -79,6 +128,7 @@ export function ContactSection() {
                   </label>
                   <input
                     id="name"
+                    name="name"
                     type="text"
                     required
                     placeholder="Your name"
@@ -106,6 +156,7 @@ export function ContactSection() {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     required
                     placeholder="name@company.com"
@@ -134,6 +185,7 @@ export function ContactSection() {
                 </label>
                 <input
                   id="website"
+                  name="website"
                   type="text"
                   placeholder="https://company.com"
                   value={formData.website}
@@ -160,6 +212,7 @@ export function ContactSection() {
                 </label>
                 <select
                   id="projectFocus"
+                  name="projectFocus"
                   value={formData.projectFocus}
                   onChange={(e) => setFormData({ ...formData, projectFocus: e.target.value })}
                   style={{
@@ -174,7 +227,7 @@ export function ContactSection() {
                   }}
                 >
                   <option value="Manufacturing SaaS / Factory Visibility">Manufacturing SaaS / Factory Visibility</option>
-                  <option value="Vision AI / Computer Vision">Vision AI / Computer Vision</option>
+                  <option value="Enterprise A.I Vision">Enterprise A.I Vision</option>
                   <option value="GIS Services / Spatial Analysis">GIS Services / Spatial Analysis</option>
                   <option value="Digital Twin / Industrial Digital Twin">Digital Twin / Industrial Digital Twin</option>
                   <option value="Custom Analytics Platform">Custom Analytics Platform</option>
@@ -190,6 +243,7 @@ export function ContactSection() {
                 </label>
                 <textarea
                   id="message"
+                  name="message"
                   rows={4}
                   placeholder="Tell us about your factory, sites, or asset telemetry sources..."
                   value={formData.message}
@@ -210,11 +264,28 @@ export function ContactSection() {
 
               <button
                 type="submit"
+                disabled={isSubmitting}
                 className="btn-pill btn-primary"
-                style={{ width: "100%", padding: "14px 28px", fontSize: "1rem", marginTop: "10px" }}
+                style={{
+                  width: "100%",
+                  padding: "14px 28px",
+                  fontSize: "1rem",
+                  marginTop: "10px",
+                  opacity: isSubmitting ? 0.7 : 1,
+                  cursor: isSubmitting ? "wait" : "pointer",
+                }}
               >
-                <span>Send Inquiry</span>
-                <Send size={16} style={{ marginLeft: "8px" }} />
+                {isSubmitting ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                    <Loader2 size={18} className="spin" style={{ animation: "spin 1s linear infinite" }} />
+                    SUBMITTING INQUIRY...
+                  </span>
+                ) : (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                    <span>Send Inquiry</span>
+                    <Send size={16} />
+                  </span>
+                )}
               </button>
             </form>
           )}
