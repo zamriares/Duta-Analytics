@@ -1,61 +1,115 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
-const steps = [
+interface StepItem {
+  step: string;
+  title: string;
+  highlight: string;
+  description: string;
+}
+
+const steps: StepItem[] = [
   {
-    number: "01",
-    title: "Activation, simplified",
-    highlight: "One call triggers mobilization.",
+    step: "01",
+    title: "Activation & Telemetry Sync",
+    highlight: "One call triggers full spatial & sensor mobilization.",
     description:
-      "Your requirements: craft, count, and start date route directly to our verified crews. No hand-offs. No escalations. Just boots on the ground in minutes.",
+      "Connect physical site equipment, count parameters, and IoT sensors directly to our operational control matrix. Zero manual hand-offs, real-time sync across all site nodes.",
   },
   {
-    number: "02",
-    title: "Cleared to count",
-    highlight: "Our team handles all screening and verification before dispatch.",
+    step: "02",
+    title: "AI Screening & Verification",
+    highlight: "Enforcing zero-fail operational compliance across all parameters.",
     description:
-      "Compliance, background, certifications, and fitness-for-duty — we enforce a zero-fail model to guarantee every worker clears the gate on Day 1.",
+      "Automated verification engines screen telemetry, background logs, and fitness-for-duty metrics to guarantee every physical system and worker clears baseline checks on Day 1.",
   },
   {
-    number: "03",
-    title: "Proven field match",
-    highlight: "We don't just provide available workers. We deploy proven crews.",
+    step: "03",
+    title: "Spatial GIS & Control Dispatch",
+    highlight: "Engineered for high-tempo endurance and site precision.",
     description:
-      "By filtering for past performance, role fit, and reliability, we deliver teams engineered for endurance — ensuring your project stays fully manned from first break to completion.",
+      "By filtering for past performance, role fit, and real-time spatial positioning, we deliver coordinated field teams engineered for continuous high-performance execution.",
   },
   {
-    number: "04",
-    title: "Seamless arrival",
-    highlight: 'We manage the "last mile" of mobilization.',
+    step: "04",
+    title: "Seamless Real-Time Execution",
+    highlight: "Active coordination when operational conditions shift.",
     description:
-      "Every crew arrives site-ready with finalized reporting details. With real-time arrival monitoring and active coordination, we ensure your shift starts on time, even when field conditions shift.",
+      "Continuous arrival monitoring and live shift telemetry ensure operational continuity. Every metric updates in real-time on command dashboards.",
   },
 ];
 
 export function ProcessSection() {
+  const [stepProgress, setStepProgress] = useState<number[]>(steps.map(() => 0));
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const stepElements = document.querySelectorAll(".flow__step");
+      const windowHeight = window.innerHeight;
+
+      const newProgress = Array.from(stepElements).map((el) => {
+        const rect = el.getBoundingClientRect();
+        const start = windowHeight * 0.85;
+        const end = windowHeight * 0.25;
+        const current = rect.top;
+
+        if (current > start) return 0;
+        if (current < end) return 1;
+        return (start - current) / (start - end);
+      });
+
+      setStepProgress(newProgress);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <section className="page-section process-section flow" id="process">
       <div className="container">
-        <div style={{ textAlign: "left", maxWidth: "720px" }}>
+        <div className="flow__header-wrapper">
           <span className="section-eyebrow">HIGH-TEMPO WORKFLOW</span>
           <h2 className="section-title">Mobilization Engineered for Endurance</h2>
         </div>
 
-        <div className="process-grid">
-          {steps.map((step, idx) => (
-            <motion.div
-              key={step.number}
-              className="process-card"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
-            >
-              <div className="step-num">{step.number}</div>
-              <h3 className="step-title">{step.title}</h3>
-              <p className="step-highlight">{step.highlight}</p>
-              <p className="step-desc">{step.description}</p>
-            </motion.div>
-          ))}
+        <div className="flow__container">
+          {steps.map((item, idx) => {
+            const progress = stepProgress[idx] ?? 0;
+            const isActive = progress > 0.05 && progress < 0.95;
+            const isVisited = progress >= 0.95;
+
+            return (
+              <div
+                key={item.step}
+                className={`flow__step ${isActive ? "flow__step--active" : ""} ${
+                  isVisited ? "flow__step--visited" : ""
+                }`}
+                data-step={idx + 1}
+              >
+                <div className="flow__header">
+                  <div className="flow__number">
+                    <span>{item.step}</span>
+                  </div>
+                  <h3 className="flow__title">{item.title}</h3>
+                </div>
+
+                <div className="flow__body">
+                  <div className="flow__track">
+                    <div
+                      className="flow__track-fill"
+                      style={{ transform: `scaleY(${progress})` }}
+                    />
+                  </div>
+                  <div className="flow__content">
+                    <p className="flow__highlight">{item.highlight}</p>
+                    <p className="flow__description">{item.description}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
