@@ -223,8 +223,8 @@ export function SpatialSection() {
           {/* Image Showcase Container */}
           <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
             <img
-              src="/assets/spatial_gis_map.jpg"
-              alt="Spatial GIS & Site Intelligence Map Interface"
+              src="/assets/WebAssetLidarTopo.webp"
+              alt="Spatial GIS & LiDAR Topography Site Intelligence Map"
               style={{
                 width: "100%",
                 height: "auto",
@@ -232,7 +232,7 @@ export function SpatialSection() {
                 objectFit: "cover",
               }}
               onError={(e) => {
-                e.currentTarget.src = "/spatial_gis_map.jpg";
+                e.currentTarget.src = "/assets/WebAssetLidarTopo.png";
               }}
             />
           </div>
