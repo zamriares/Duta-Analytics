@@ -87,9 +87,9 @@ export function VisionSection() {
     <section className="page-section vision-section flow" id="vision">
       <div className="container">
         <div style={{ textAlign: "left", maxWidth: "840px" }}>
-          <span className="section-eyebrow">ENTERPRISE COMPUTER VISION</span>
+          <span className="section-eyebrow">ENTERPRISE A.I VISION</span>
           <h2 className="section-title">
-            Enterprise Computer Vision for Industrial Site Operations
+            Enterprise A.I Vision for Industrial Site Operations
           </h2>
           <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
             Turn standard camera feeds into automated digital sensors. Audit safety postures, detect surface defects, and digitize equipment states in real time.
@@ -129,7 +129,7 @@ export function VisionSection() {
               <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
               <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27c93f" }} />
               <span style={{ color: "var(--text-secondary)", marginLeft: "12px" }}>
-                VISION INTEL CONTROL ROOM &bull; RTSP STREAM #04
+                ENTERPRISE A.I VISION CONTROL ROOM &bull; RTSP STREAM #04
               </span>
             </div>
 
@@ -471,7 +471,7 @@ export function VisionSection() {
 
         {/* CCTV Comparison Grid */}
         <div style={{ marginTop: "64px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
-          <span className="section-eyebrow">EDGE AI VS TRADITIONAL CCTV</span>
+          <span className="section-eyebrow">ENTERPRISE A.I VISION VS TRADITIONAL CCTV</span>
           <h3 className="section-title" style={{ fontSize: "1.8rem" }}>
             Transforming Passive Recording into Active Operational AI
           </h3>

@@ -17,7 +17,7 @@ const solutionCards = [
   },
   {
     icon: Eye,
-    title: "AI Computer Vision Inspection",
+    title: "Enterprise A.I Vision Inspection",
     desc: "Deploy neural vision models at production speed to detect surface flaws, assembly errors, and safety compliance.",
     bullets: ["Sub-millimeter defect detection at 60 FPS", "Real-time edge neural inference on CUDA", "Automated alert triggers & reject gate activation"],
   },
