@@ -7,21 +7,25 @@ const digitalTwinFeatures = [
     icon: Box,
     title: "Interactive WebGL 3D Models",
     desc: "Lightweight 3D representations of production equipment rendered smoothly in web browsers using Three.js.",
+    secondary: "GLTF/GLB compression with LOD (Level of Detail) mesh optimization.",
   },
   {
     icon: Cpu,
     title: "Sensor-Linked Mesh States",
     desc: "3D geometry components dynamically change color, pulse, or animate based on live PLC temperature and vibration metrics.",
+    secondary: "Real-time shader materials linked directly to WebSocket telemetry streams.",
   },
   {
     icon: RefreshCw,
     title: "Predictive Wear Simulation",
     desc: "Simulate mechanical stress and thermal fatigue on digital twin components to plan maintenance before failure occurs.",
+    secondary: "Finite Element Method (FEM) fatigue modeling with historical lifespan projection.",
   },
   {
     icon: Eye,
     title: "Spatial AR & VR Readiness",
     desc: "Export 3D twin scenes to augmented reality headsets for technician guidance during complex repair procedures.",
+    secondary: "WebXR & OpenXR compatible for hands-free maintenance walkthroughs.",
   },
 ];
 
@@ -37,47 +41,66 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
       style={{
-        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-        transition: "border 0.25s ease",
+        padding: "24px",
+        background: "var(--bg-secondary)",
+        borderRadius: "4px",
+        border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
+        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        transition: "all 0.25s ease",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <div className="feature-icon-box" style={{ marginBottom: 0 }}>
+          <Icon size={20} />
+        </div>
+
         <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          title="Click icon to toggle secondary details"
-          className="feature-icon-box"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen((prev) => !prev);
+          }}
+          title="Click to toggle secondary details"
           style={{
-            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "var(--bg-primary)",
-            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
-            cursor: "pointer",
             display: "inline-flex",
             alignItems: "center",
-            gap: "6px",
-            padding: "8px 12px",
+            gap: "5px",
+            padding: "4px 8px",
+            fontSize: "0.75rem",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
             borderRadius: "4px",
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
           }}
         >
-          <Icon size={20} />
-          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
+          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
         </button>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "8px" }}>{feature.title}</h3>
+      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+        {feature.title}
+      </h3>
+      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+        {feature.desc}
+      </p>
 
       {/* Secondary Content: Appears strictly on icon click */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 14 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
-              {feature.desc}
-            </p>
+            <div style={{ paddingTop: "10px", borderTop: "1px dashed var(--border-subtle)", fontSize: "0.84rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
+              &rsaquo; {feature.secondary}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

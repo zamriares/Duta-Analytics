@@ -7,21 +7,25 @@ const spatialCapabilities = [
     icon: Layers,
     title: "Geospatial Asset Layers",
     desc: "Overlay physical machinery, power conduits, and sensor nodes on high-resolution CAD and GIS site plans.",
+    secondary: "Supports CAD DWG/DXF import, GeoJSON vector layers, and coordinate auto-projection.",
   },
   {
     icon: Map,
     title: "Multi-Facility Fleet Map",
     desc: "Track regional plants, logistics routes, and supply chain status across geographic locations in a single view.",
+    secondary: "Global GIS map view with sub-second sync across regional plant sites.",
   },
   {
     icon: Navigation,
     title: "AGV & Mobile Asset Tracking",
     desc: "Monitor real-time positions, battery levels, and route efficiency of automated guided vehicles across the factory floor.",
+    secondary: "Ultra-wideband (UWB) indoor positioning with 10cm spatial accuracy.",
   },
   {
     icon: Compass,
     title: "Environmental Heatmaps",
     desc: "Visualize temperature gradients, noise levels, and air quality telemetry spatially across factory bays.",
+    secondary: "Kriging spatial interpolation for continuous environmental gradient heatmaps.",
   },
 ];
 
@@ -37,47 +41,66 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
       style={{
-        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-        transition: "border 0.25s ease",
+        padding: "24px",
+        background: "var(--bg-secondary)",
+        borderRadius: "4px",
+        border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
+        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        transition: "all 0.25s ease",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <div className="feature-icon-box" style={{ marginBottom: 0 }}>
+          <Icon size={20} />
+        </div>
+
         <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          title="Click icon to toggle secondary details"
-          className="feature-icon-box"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen((prev) => !prev);
+          }}
+          title="Click to toggle secondary details"
           style={{
-            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "var(--bg-primary)",
-            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
-            cursor: "pointer",
             display: "inline-flex",
             alignItems: "center",
-            gap: "6px",
-            padding: "8px 12px",
+            gap: "5px",
+            padding: "4px 8px",
+            fontSize: "0.75rem",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
             borderRadius: "4px",
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
           }}
         >
-          <Icon size={20} />
-          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
+          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
         </button>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "8px" }}>{cap.title}</h3>
+      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+        {cap.title}
+      </h3>
+      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+        {cap.desc}
+      </p>
 
       {/* Secondary Content: Appears strictly on icon click */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 14 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
-              {cap.desc}
-            </p>
+            <div style={{ paddingTop: "10px", borderTop: "1px dashed var(--border-subtle)", fontSize: "0.84rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
+              &rsaquo; {cap.secondary}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

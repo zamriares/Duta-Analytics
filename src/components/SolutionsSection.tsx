@@ -13,25 +13,25 @@ const solutionCards = [
     icon: Cpu,
     title: "Factory Telemetry & Process SaaS",
     desc: "Connect machine sensors, PLC signals, and downtime logs into unified operational dashboards for plant managers.",
-    bullets: ["Live OEE tracking", "Downtime root cause tagging", "Shift performance metrics"],
+    bullets: ["Live OEE tracking & downtime root cause tagging", "Real-time shift performance metrics & machine telemetry", "Sub-30ms OPC-UA edge gateway integration"],
   },
   {
     icon: Eye,
     title: "AI Computer Vision Inspection",
     desc: "Deploy neural vision models at production speed to detect surface flaws, assembly errors, and safety compliance.",
-    bullets: ["Sub-millimeter defect detection", "Real-time edge inference", "Automated alert triggers"],
+    bullets: ["Sub-millimeter defect detection at 60 FPS", "Real-time edge neural inference on CUDA", "Automated alert triggers & reject gate activation"],
   },
   {
     icon: MapPin,
     title: "Spatial GIS & Site Intelligence",
     desc: "Map physical assets, logistics paths, and environmental sensors onto interactive spatial digital maps.",
-    bullets: ["Geospatial asset tracking", "Site heatmaps & density", "Multi-facility overview"],
+    bullets: ["Geospatial asset tracking & indoor positioning", "Site thermal heatmaps & traffic density overlays", "Multi-facility regional fleet management"],
   },
   {
     icon: Boxes,
     title: "3D Asset & Digital Twin Modeling",
     desc: "Create interactive 3D digital twins of production lines to simulate workflows and monitor live equipment state.",
-    bullets: ["Web-based 3D scene viewer", "Sensor-linked mesh state", "Predictive maintenance simulation"],
+    bullets: ["Web-based 3D scene viewer in Three.js", "Sensor-linked mesh state & live thermal pulse", "Predictive maintenance & wear simulation"],
   },
 ];
 
@@ -47,65 +47,89 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
       viewport={{ once: true }}
       transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
       style={{
-        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-        transition: "border 0.25s ease",
+        padding: "24px",
+        background: "var(--bg-secondary)",
+        borderRadius: "4px",
+        border: isOpen ? "1px solid var(--accent-cyan)" : "0.8px solid var(--border-subtle)",
+        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+        transition: "all 0.25s ease",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <div className="feature-icon-box" style={{ marginBottom: 0 }}>
+          <Icon size={20} />
+        </div>
+
+        {/* Icon Click Button to Toggle Secondary Content */}
         <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          title="Click icon to toggle secondary details"
-          className="feature-icon-box"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen((prev) => !prev);
+          }}
+          title="Click to view secondary details"
           style={{
-            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "var(--bg-primary)",
-            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
-            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
-            cursor: "pointer",
             display: "inline-flex",
             alignItems: "center",
-            gap: "6px",
-            padding: "8px 12px",
+            gap: "5px",
+            padding: "4px 8px",
+            fontSize: "0.75rem",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
             borderRadius: "4px",
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
           }}
         >
-          <Icon size={20} />
-          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+          <span>{isOpen ? "HIDE DETAILS" : "VIEW DETAILS"}</span>
+          <Info size={12} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
         </button>
       </div>
 
-      <h3 className="feature-title" style={{ marginBottom: "8px" }}>{sol.title}</h3>
+      {/* Main Title & Description ALWAYS Visible */}
+      <h3 className="feature-title" style={{ marginBottom: "10px", fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+        {sol.title}
+      </h3>
+      <p className="feature-desc" style={{ fontSize: "0.92rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+        {sol.desc}
+      </p>
 
-      {/* Secondary Content: Appears strictly on icon click */}
+      {/* Secondary Content: Expanded Bullet Features Revealed on Icon Click */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25 }}
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 16 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ marginBottom: "16px", fontSize: "0.9rem", color: "var(--text-secondary)" }}>
-              {sol.desc}
-            </p>
-            <ul style={{ listStyle: "none", padding: 0 }}>
-              {sol.bullets.map((b) => (
-                <li
-                  key={b}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    fontSize: "0.85rem",
-                    color: "var(--text-secondary)",
-                    marginBottom: "8px",
-                  }}
-                >
-                  <span style={{ width: "4px", height: "4px", background: "var(--accent-cyan)", borderRadius: "50%" }} />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
+            <div style={{ paddingTop: "12px", borderTop: "1px dashed var(--border-subtle)" }}>
+              <div style={{ fontSize: "0.72rem", fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", fontWeight: 700, marginBottom: "8px", letterSpacing: "0.08em" }}>
+                SECONDARY SYSTEM SPECIFICATIONS:
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                {sol.bullets.map((b) => (
+                  <li
+                    key={b}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "0.85rem",
+                      color: "var(--text-primary)",
+                      marginBottom: "8px",
+                      fontFamily: "var(--font-mono)",
+                    }}
+                  >
+                    <span style={{ width: "5px", height: "5px", background: "var(--accent-cyan)", borderRadius: "50%", flexShrink: 0 }} />
+                    <span>{b}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
