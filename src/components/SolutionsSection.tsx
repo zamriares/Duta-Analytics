@@ -176,12 +176,12 @@ export function SolutionsSection() {
             ].map((st, idx) => (
               <motion.div
                 key={st.step}
-                initial={{ opacity: 0, x: -80 }}
+                initial={{ opacity: 0, x: -90 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: false, amount: 0.3 }}
                 transition={{
-                  duration: 0.7,
-                  delay: 0.15 * idx,
+                  duration: 1.4,
+                  delay: 0.3 * idx,
                   ease: [0.16, 1, 0.3, 1],
                 }}
                 whileHover={{ y: -6, scale: 1.015 }}
@@ -193,28 +193,28 @@ export function SolutionsSection() {
                 }}
               >
                 <motion.div
-                  initial={{ opacity: 0, x: -40 }}
+                  initial={{ opacity: 0, x: -50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
-                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.1, ease: "easeOut" }}
+                  transition={{ duration: 1.2, delay: 0.3 * idx + 0.15, ease: [0.16, 1, 0.3, 1] }}
                   style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}
                 >
                   {st.step}
                 </motion.div>
                 <motion.h4
-                  initial={{ opacity: 0, x: -30 }}
+                  initial={{ opacity: 0, x: -40 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
-                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.15, ease: "easeOut" }}
+                  transition={{ duration: 1.2, delay: 0.3 * idx + 0.3, ease: [0.16, 1, 0.3, 1] }}
                   style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}
                 >
                   {st.title}
                 </motion.h4>
                 <motion.p
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
-                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.2, ease: "easeOut" }}
+                  transition={{ duration: 1.2, delay: 0.3 * idx + 0.45, ease: [0.16, 1, 0.3, 1] }}
                   style={{ fontSize: "0.88rem", color: "var(--text-secondary)", margin: 0 }}
                 >
                   {st.text}
