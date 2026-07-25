@@ -173,9 +173,18 @@ export function SolutionsSection() {
               { step: "01", title: "Signal Capture", text: "Ingest PLC, camera streams, and GIS layers into edge gateways." },
               { step: "02", title: "Context Fusion", text: "Link telemetry to 3D spatial models and production schedules." },
               { step: "03", title: "Control Room SaaS", text: "Deliver role-based dashboards and automated action triggers." },
-            ].map((st) => (
-              <div
+            ].map((st, idx) => (
+              <motion.div
                 key={st.step}
+                initial={{ opacity: 0, x: -80 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{
+                  duration: 0.7,
+                  delay: 0.15 * idx,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
+                whileHover={{ y: -6, scale: 1.015 }}
                 style={{
                   padding: "20px 0",
                   background: "transparent",
@@ -183,16 +192,34 @@ export function SolutionsSection() {
                   borderBottom: "1px solid #666666",
                 }}
               >
-                <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}>
+                <motion.div
+                  initial={{ opacity: 0, x: -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.1, ease: "easeOut" }}
+                  style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}
+                >
                   {st.step}
-                </div>
-                <h4 style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}>
+                </motion.div>
+                <motion.h4
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.15, ease: "easeOut" }}
+                  style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}
+                >
                   {st.title}
-                </h4>
-                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", margin: 0 }}>
+                </motion.h4>
+                <motion.p
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.15 * idx + 0.2, ease: "easeOut" }}
+                  style={{ fontSize: "0.88rem", color: "var(--text-secondary)", margin: 0 }}
+                >
                   {st.text}
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
             ))}
           </div>
         </div>
