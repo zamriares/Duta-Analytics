@@ -15,7 +15,7 @@ export function Header() {
   ];
 
   return (
-    <header className="vectr-header" style={{ position: "sticky", top: 0, zIndex: 1000, background: "rgba(9, 10, 15, 0.92)", backdropFilter: "blur(12px)" }}>
+    <header className="vectr-header">
       <a href="#" className="vectr-brand">
         <span className="vectr-brand-dot" />
         <span>DUTA ANALYTICS</span>
@@ -41,14 +41,6 @@ export function Header() {
         className="mobile-menu-btn"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         aria-label="Toggle Navigation Menu"
-        style={{
-          display: "none",
-          background: "transparent",
-          border: "none",
-          color: "#ffffff",
-          cursor: "pointer",
-          padding: "8px",
-        }}
       >
         {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
       </button>
@@ -64,12 +56,14 @@ export function Header() {
             width: "100%",
             background: "rgba(9, 10, 15, 0.96)",
             backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
             borderBottom: "1px solid var(--border-subtle)",
-            padding: "24px",
+            padding: "24px 20px",
             display: "flex",
             flexDirection: "column",
             gap: "16px",
-            boxShadow: "0 20px 40px rgba(0,0,0,0.6)",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.8)",
+            zIndex: 999,
           }}
         >
           {navLinks.map((link) => (
@@ -78,12 +72,12 @@ export function Header() {
               href={link.href}
               onClick={() => setIsMobileMenuOpen(false)}
               style={{
-                fontSize: "1.05rem",
+                fontSize: "1rem",
                 fontWeight: 600,
-                color: "var(--text-primary)",
+                color: "var(--text-primary, #ffffff)",
                 textDecoration: "none",
-                padding: "8px 0",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
+                padding: "10px 0",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
