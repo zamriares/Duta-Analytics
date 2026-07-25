@@ -1,7 +1,16 @@
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
   ArrowRight,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize,
+  Eye,
+  ShieldCheck,
+  Cpu,
 } from "lucide-react";
 
 const visionCapabilities = [
@@ -47,6 +56,33 @@ const cctvComparison = [
 ];
 
 export function VisionSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+    } else {
+      videoRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const handleFullscreen = () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.requestFullscreen) {
+      videoRef.current.requestFullscreen();
+    }
+  };
+
   return (
     <section className="page-section vision-section flow" id="vision">
       <div className="container">
@@ -60,90 +96,285 @@ export function VisionSection() {
           </p>
         </div>
 
-        {/* Live Vision System Interactive Console Mockup */}
+        {/* Vision Intel Control Room Framed Video Showcase */}
         <motion.div
           style={{
             marginTop: "40px",
-            background: "var(--bg-dark)",
-            color: "var(--text-inverse)",
+            background: "var(--bg-secondary)",
             borderRadius: "6px",
-            border: "0.8px solid var(--border-dark)",
+            border: "1px solid var(--border-subtle)",
             overflow: "hidden",
-            padding: "28px",
+            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
           }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
+          {/* Top Browser / Control Room Header Bar */}
           <div
             style={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              flexWrap: "wrap",
-              gap: "16px",
-              paddingBottom: "20px",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              padding: "12px 20px",
+              background: "var(--bg-secondary)",
+              borderBottom: "1px solid var(--border-subtle)",
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.8rem",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-              <div
-                style={{
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  background: "rgb(0, 220, 130)",
-                  boxShadow: "0 0 10px rgb(0, 220, 130)",
-                }}
-              />
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.1em" }}>
-                VISION ENGINE DEMONSTRATION &bull; RTSP STREAM #04
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff5f56" }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27c93f" }} />
+              <span style={{ color: "var(--text-secondary)", marginLeft: "12px" }}>
+                VISION INTEL CONTROL ROOM &bull; RTSP STREAM #04
               </span>
             </div>
-            <div style={{ display: "flex", gap: "12px", fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "rgb(180, 185, 198)" }}>
-              <span>ENGINE: TensorRT 10.2</span>
-              <span>INFERENCE: OPERATIONAL (18ms)</span>
+
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <span
+                style={{
+                  padding: "3px 10px",
+                  borderRadius: "12px",
+                  background: "rgba(0, 240, 255, 0.15)",
+                  color: "var(--accent-cyan)",
+                  fontWeight: 700,
+                  fontSize: "0.75rem",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--accent-cyan)" }} />
+                LIVE 60 FPS INFERENCE
+              </span>
             </div>
           </div>
 
+          {/* Video Player Container with AI Neural Overlay Frame */}
+          <div style={{ position: "relative", width: "100%", background: "#000000" }}>
+            <video
+              ref={videoRef}
+              src="/assets/vision_intel_video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: "100%",
+                height: "auto",
+                display: "block",
+                maxHeight: "600px",
+                objectFit: "cover",
+              }}
+              onError={(e) => {
+                e.currentTarget.src = "/vision_intel_video.mp4";
+              }}
+            />
+
+            {/* AI HUD Overlay Corner Reticles */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+                zIndex: 5,
+                background: "radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(0,0,0,0.5) 100%)",
+              }}
+            >
+              {/* Top Left HUD Badge */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "16px",
+                  left: "16px",
+                  padding: "6px 12px",
+                  background: "rgba(9, 10, 15, 0.85)",
+                  backdropFilter: "blur(6px)",
+                  border: "1px solid var(--accent-cyan)",
+                  borderRadius: "4px",
+                  color: "var(--accent-cyan)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <Eye size={14} />
+                <span>CAM_ID: CAM-FAC-04 [NEURAL TRACKING]</span>
+              </div>
+
+              {/* Top Right HUD Badge */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "16px",
+                  right: "16px",
+                  padding: "6px 12px",
+                  background: "rgba(9, 10, 15, 0.85)",
+                  backdropFilter: "blur(6px)",
+                  border: "1px solid rgba(0, 240, 255, 0.3)",
+                  borderRadius: "4px",
+                  color: "var(--text-primary)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 600,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <Cpu size={14} color="var(--accent-cyan)" />
+                <span>LATENCY: 14.2ms &bull; CUDA ENGINE 10.2</span>
+              </div>
+
+              {/* Bottom Left AI Telemetry Node */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "20px",
+                  left: "16px",
+                  padding: "6px 12px",
+                  background: "rgba(9, 10, 15, 0.85)",
+                  backdropFilter: "blur(6px)",
+                  border: "1px solid rgba(0, 180, 100, 0.4)",
+                  borderRadius: "4px",
+                  color: "rgb(0, 180, 100)",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+              >
+                <ShieldCheck size={14} />
+                <span>OBJECT LOCK: 14 SENSORS OK</span>
+              </div>
+            </div>
+
+            {/* Video Controls Bar Overlay */}
+            <div
+              style={{
+                position: "absolute",
+                bottom: "16px",
+                right: "16px",
+                zIndex: 10,
+                display: "flex",
+                gap: "8px",
+                background: "rgba(9, 10, 15, 0.85)",
+                backdropFilter: "blur(8px)",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                border: "1px solid var(--border-subtle)",
+              }}
+            >
+              <button
+                onClick={togglePlay}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  fontSize: "0.8rem",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {isPlaying ? <Pause size={16} /> : <Play size={16} />}
+                <span>{isPlaying ? "PAUSE" : "PLAY"}</span>
+              </button>
+
+              <div style={{ width: "1px", background: "var(--border-subtle)" }} />
+
+              <button
+                onClick={toggleMute}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                title={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+              </button>
+
+              <div style={{ width: "1px", background: "var(--border-subtle)" }} />
+
+              <button
+                onClick={handleFullscreen}
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "#ffffff",
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+                title="Fullscreen"
+              >
+                <Maximize size={16} />
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Telemetry Bar */}
           <div
             style={{
+              padding: "20px 24px",
+              background: "var(--bg-secondary)",
+              borderTop: "1px solid var(--border-subtle)",
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
               gap: "24px",
-              marginTop: "24px",
             }}
           >
             <div>
-              <span style={{ fontSize: "0.75rem", color: "rgb(140, 145, 158)", fontFamily: "var(--font-mono)" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>
                 PARTS PROCESSED (SHIFT)
               </span>
-              <div style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "4px" }}>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "4px" }}>
                 14,820
               </div>
             </div>
+
             <div>
-              <span style={{ fontSize: "0.75rem", color: "rgb(140, 145, 158)", fontFamily: "var(--font-mono)" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>
                 DEFECTS FLAGGED
               </span>
-              <div style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: "rgb(255, 180, 0)", marginTop: "4px" }}>
-                18 <span style={{ fontSize: "0.85rem", fontWeight: 500 }}>(0.12%)</span>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: "rgb(255, 180, 0)", marginTop: "4px" }}>
+                18 <span style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--text-secondary)" }}>(0.12%)</span>
               </div>
             </div>
+
             <div>
-              <span style={{ fontSize: "0.75rem", color: "rgb(140, 145, 158)", fontFamily: "var(--font-mono)" }}>
+              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>
                 PPE AUDITED WORKERS
               </span>
-              <div style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "4px" }}>
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "4px" }}>
                 142
               </div>
             </div>
+
             <div>
-              <span style={{ fontSize: "0.75rem", color: "rgb(140, 145, 158)", fontFamily: "var(--font-mono)" }}>
-                SAFETY STATUS
+              <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", fontFamily: "var(--font-mono)" }}>
+                SAFETY COMPLIANCE
               </span>
-              <div style={{ fontSize: "2rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: "rgb(0, 220, 130)", marginTop: "4px" }}>
-                100% Cleared
+              <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)", marginTop: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
+                <CheckCircle2 size={20} />
+                <span>100% Cleared</span>
               </div>
             </div>
           </div>
