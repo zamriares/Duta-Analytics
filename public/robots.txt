@@ -1,0 +1,6 @@
+# Googlebot and Search Engine Crawler Directives for Duta Analytics
+User-agent: *
+Allow: /
+
+# Sitemap Index File
+Sitemap: https://www.dutaanalytics.com/sitemap.xml
