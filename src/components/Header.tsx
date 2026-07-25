@@ -1,59 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 
 const navLinks = [
-  { label: "Dashboard", href: "#dashboard", id: "dashboard" },
-  { label: "Solutions", href: "#solutions", id: "solutions" },
-  { label: "Spatial Intelligence", href: "#spatial", id: "spatial" },
-  { label: "Digital Twin", href: "#digital-twin", id: "digital-twin" },
-  { label: "Vision AI", href: "#vision", id: "vision" },
-  { label: "About", href: "#about", id: "about" },
-  { label: "Case Studies", href: "#case-studies", id: "case-studies" },
+  { label: "Dashboard", href: "#dashboard" },
+  { label: "Solutions", href: "#solutions" },
+  { label: "Spatial Intelligence", href: "#spatial" },
+  { label: "Digital Twin", href: "#digital-twin" },
+  { label: "Vision AI", href: "#vision" },
+  { label: "About", href: "#about" },
+  { label: "Case Studies", href: "#case-studies" },
 ];
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("#dashboard");
-
-  // Precision Focal Line Scroll Spy: Highlight section covering screen focal Y
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight;
-      const windowHeight = window.innerHeight;
-
-      // 1. Top of page fallback
-      if (scrollY < 150) {
-        setActiveNav("#dashboard");
-        return;
-      }
-
-      // 2. Bottom of page fallback
-      if (windowHeight + Math.round(scrollY) >= docHeight - 100) {
-        setActiveNav(navLinks[navLinks.length - 1].href);
-        return;
-      }
-
-      // 3. Focal line at 35% of screen height
-      const focusY = windowHeight * 0.35;
-
-      for (let i = 0; i < navLinks.length; i++) {
-        const el = document.getElementById(navLinks[i].id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= focusY && rect.bottom >= focusY) {
-            setActiveNav(navLinks[i].href);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   return (
     <header className="vectr-header">
@@ -61,7 +21,7 @@ export function Header() {
         <span>DUTA ANALYTICS</span>
       </a>
 
-      {/* Desktop Navigation Links with Active Scroll Indicator */}
+      {/* Desktop Navigation Links with Active Click Selection Line */}
       <nav className="vectr-nav" aria-label="Main navigation">
         {navLinks.map((link) => {
           const isSelected = activeNav === link.href;
