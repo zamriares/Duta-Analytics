@@ -13,15 +13,15 @@ const navLinks = [
 
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("#dashboard");
+  const [activeNav, setActiveNav] = useState<string | null>(null);
 
   return (
     <header className="vectr-header">
-      <a href="#" className="vectr-brand">
+      <a href="#" className="vectr-brand" onClick={() => setActiveNav(null)}>
         <span>DUTA ANALYTICS</span>
       </a>
 
-      {/* Desktop Navigation Links with Active Click Selection Line */}
+      {/* Desktop Navigation Links (Inactive by default, active only on explicit click) */}
       <nav className="vectr-nav" aria-label="Main navigation">
         {navLinks.map((link) => {
           const isSelected = activeNav === link.href;
