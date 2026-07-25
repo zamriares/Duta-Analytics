@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Loader } from "./components/Loader";
 import { TechCanvas } from "./components/TechCanvas";
 import { Header } from "./components/Header";
@@ -15,8 +17,21 @@ import { StandardsSection } from "./components/StandardsSection";
 import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
 
+gsap.registerPlugin(ScrollTrigger);
+
+// Clear browser scroll memory on refresh
+if (typeof window !== "undefined") {
+  ScrollTrigger.clearScrollMemory("manual");
+}
+
 export function App() {
   useEffect(() => {
+    // 0. Force page scroll to top on mount
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+
     // 1. Add Lenis structural trigger classes to HTML element
     const htmlEl = document.documentElement;
     htmlEl.classList.add("lenis", "lenis-smooth");
@@ -28,25 +43,19 @@ export function App() {
       smoothWheel: true,
     });
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    lenis.scrollTo(0, { immediate: true });
 
-    requestAnimationFrame(raf);
+    // 3. Synchronize Lenis smooth scroll with GSAP ScrollTrigger ticker
+    lenis.on("scroll", ScrollTrigger.update);
 
-    // 3. Scroll progress & IntersectionObserver for section transitions
-    lenis.on("scroll", (e: { scroll: number }) => {
-      const heroEl = document.querySelector(".hero");
-      if (heroEl) {
-        if (e.scroll > 80) {
-          heroEl.classList.add("hide");
-        } else {
-          heroEl.classList.remove("hide");
-        }
-      }
-    });
+    const updateLenis = (time: number) => {
+      lenis.raf(time * 1000);
+    };
 
+    gsap.ticker.add(updateLenis);
+    gsap.ticker.lagSmoothing(0);
+
+    // 4. IntersectionObserver for section entrance transitions
     const observerCallback: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
@@ -66,6 +75,7 @@ export function App() {
 
     return () => {
       htmlEl.classList.remove("lenis", "lenis-smooth");
+      gsap.ticker.remove(updateLenis);
       lenis.destroy();
       observer.disconnect();
     };
@@ -94,4 +104,3 @@ export function App() {
 }
 
 export default App;
-
