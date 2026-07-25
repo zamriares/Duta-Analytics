@@ -15,27 +15,46 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeNav, setActiveNav] = useState("#dashboard");
 
-  // Scroll Spy: Synchronize active header nav link with page scroll position
+  // Accurate IntersectionObserver Scroll Spy: Highlight section in monitor focal area
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 140; // 140px header offset buffer
-
-      for (let i = navLinks.length - 1; i >= 0; i--) {
-        const sectionEl = document.getElementById(navLinks[i].id);
-        if (sectionEl) {
-          const sectionTop = sectionEl.offsetTop;
-          if (scrollPosition >= sectionTop) {
-            setActiveNav(navLinks[i].href);
-            break;
-          }
-        }
-      }
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -40% 0px",
+      threshold: [0.1, 0.3, 0.6],
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Trigger initial scroll check on load
+    const sectionEntries = new Map<string, number>();
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          sectionEntries.set(entry.target.id, entry.intersectionRatio);
+        } else {
+          sectionEntries.delete(entry.target.id);
+        }
+      });
+
+      let mostVisibleId = "";
+      let highestRatio = -1;
+
+      sectionEntries.forEach((ratio, id) => {
+        if (ratio > highestRatio) {
+          highestRatio = ratio;
+          mostVisibleId = id;
+        }
+      });
+
+      if (mostVisibleId) {
+        setActiveNav(`#${mostVisibleId}`);
+      }
+    }, observerOptions);
+
+    navLinks.forEach((link) => {
+      const el = document.getElementById(link.id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -44,7 +63,7 @@ export function Header() {
         <span>DUTA ANALYTICS</span>
       </a>
 
-      {/* Desktop Navigation Links with Active Scroll Indicator */}
+      {/* Desktop Navigation Links with Viewport-Focused Active Indicator */}
       <nav className="vectr-nav" aria-label="Main navigation">
         {navLinks.map((link) => {
           const isSelected = activeNav === link.href;
