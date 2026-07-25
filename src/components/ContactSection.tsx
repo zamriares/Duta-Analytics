@@ -20,7 +20,7 @@ export function ContactSection() {
   return (
     <section className="page-section contact-section flow" id="contact">
       <div className="container">
-        <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: "800px", textAlign: "left", marginBottom: "40px" }}>
           <span className="section-eyebrow">REQUEST CONSULTATION</span>
           <h2 className="section-title">
             Discuss a Manufacturing SaaS, Vision AI, GIS, or Digital Twin Project

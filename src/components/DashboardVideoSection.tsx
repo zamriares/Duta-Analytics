@@ -35,7 +35,7 @@ export function DashboardVideoSection() {
     <section className="page-section dashboard-video-section flow" id="dashboard-demo" style={{ padding: "100px 0 120px" }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: "center", maxWidth: "840px", margin: "0 auto 48px" }}>
+        <div style={{ textAlign: "left", maxWidth: "840px", marginBottom: "48px" }}>
           <span className="section-eyebrow">LIVE CONTROL ROOM RECORDING</span>
           <h2 className="section-title" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", marginTop: "8px" }}>
             See Duta Analytics Control Room in Live Action

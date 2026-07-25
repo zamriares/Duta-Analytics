@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Activity,
@@ -15,7 +15,85 @@ import {
   Bot,
   RefreshCw,
   Play,
+  Info,
 } from "lucide-react";
+
+// Interactive Summary Metric Card with secondary content revealing on icon click or mouse pointing
+interface MetricCardProps {
+  label: string;
+  value: React.ReactNode;
+  secondary: string;
+  icon: React.ReactNode;
+  valueColor?: string;
+}
+
+function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: MetricCardProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div
+      className="feature-item"
+      style={{
+        padding: "24px",
+        background: "var(--bg-secondary)",
+        borderRadius: "4px",
+        position: "relative",
+        transition: "all 0.25s ease",
+        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+        boxShadow: isOpen ? "0 8px 24px rgba(0, 240, 255, 0.08)" : "none",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span className="section-eyebrow" style={{ marginBottom: 0 }}>{label}</span>
+        
+        {/* Interactive Icon Button: Click to toggle secondary text */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen((prev) => !prev);
+          }}
+          title="Click icon to toggle details"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "5px 8px",
+            borderRadius: "4px",
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "rgba(255, 255, 255, 0.05)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+          }}
+        >
+          {icon}
+          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+        </button>
+      </div>
+
+      <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: valueColor || "var(--text-primary)" }}>
+        {value}
+      </div>
+
+      {/* Secondary Content: Appears strictly on icon click */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 10 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <div style={{ fontSize: "0.85rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
+              &rsaquo; {secondary}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 // Tab 1: Factory Operations Command
 const machineData = [
@@ -741,7 +819,7 @@ export function DashboardSection() {
           </div>
         </div>
 
-        {/* Dynamic Summary Metrics Cards by Active Tab */}
+        {/* Dynamic Summary Metrics Cards by Active Tab with Hover / Icon Click Secondary Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab + "-metrics"}
@@ -758,281 +836,193 @@ export function DashboardSection() {
           >
             {activeTab === "Factory Operations Command" && (
               <>
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>ACTIVE MACHINES</span>
-                    <Cpu size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    42 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>/ 45 online</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Plant 04 (Kuala Lumpur)
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="ACTIVE MACHINES"
+                  value={
+                    <>
+                      42 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>/ 45 online</span>
+                    </>
+                  }
+                  secondary="Plant 04 (Kuala Lumpur) • 3 Maintenance Queued"
+                  icon={<Cpu size={18} color="var(--accent-blue)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>TOTAL ASSETS</span>
-                    <Server size={18} color="var(--text-primary)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    195
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Monitored Telemetry Nodes
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="TOTAL ASSETS"
+                  value="195"
+                  secondary="Monitored Telemetry Nodes Across 7 Production Bays"
+                  icon={<Server size={18} color="var(--text-primary)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>LIVE UPTIME</span>
-                    <Activity size={18} color="var(--accent-cyan)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)" }}>
-                    91%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Target: &gt; 90% Shift Average
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="LIVE UPTIME"
+                  value="91%"
+                  valueColor="rgb(0, 180, 100)"
+                  secondary="Target: > 90% Shift Average (Current: 91.2% Peak)"
+                  icon={<Activity size={18} color="var(--accent-cyan)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>OEE AVERAGE</span>
-                    <Gauge size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    84.5%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Overall Equipment Effectiveness
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="OEE AVERAGE"
+                  value="84.5%"
+                  secondary="Overall Equipment Effectiveness • World Target 85%"
+                  icon={<Gauge size={18} color="var(--accent-blue)" />}
+                />
               </>
             )}
 
             {activeTab === "Equipment Effectiveness" && (
               <>
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>AVAILABILITY</span>
-                    <Clock size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    92.4%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Uptime vs Scheduled Hours
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="AVAILABILITY"
+                  value="92.4%"
+                  secondary="Uptime vs Scheduled Hours (Unplanned Loss: 7.6%)"
+                  icon={<Clock size={18} color="var(--accent-blue)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>PERFORMANCE</span>
-                    <TrendingUp size={18} color="var(--accent-cyan)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    91.1%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Speed vs Ideal Cycle Time
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="PERFORMANCE"
+                  value="91.1%"
+                  secondary="Speed vs Ideal Cycle Time (Speed Loss: 8.9%)"
+                  icon={<TrendingUp size={18} color="var(--accent-cyan)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>QUALITY RATE</span>
-                    <CheckCircle2 size={18} color="rgb(0, 180, 100)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)" }}>
-                    98.6%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    First Pass Yield Rate
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="QUALITY RATE"
+                  value="98.6%"
+                  valueColor="rgb(0, 180, 100)"
+                  secondary="First Pass Yield Rate (Scrap Defect Loss: 1.4%)"
+                  icon={<CheckCircle2 size={18} color="rgb(0, 180, 100)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>WORLD-CLASS OEE</span>
-                    <Gauge size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    84.5%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Target: 85.0% World Standard
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="WORLD-CLASS OEE"
+                  value="84.5%"
+                  secondary="Target: 85.0% World Standard Benchmark"
+                  icon={<Gauge size={18} color="var(--accent-blue)" />}
+                />
               </>
             )}
 
             {activeTab === "Stop Loss Monitoring" && (
               <>
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>ACTIVE ALERTS</span>
-                    <AlertTriangle size={18} color="rgb(255, 170, 0)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(255, 170, 0)" }}>
-                    3 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>incidents</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    1 Critical, 2 Warnings
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="ACTIVE ALERTS"
+                  value={
+                    <>
+                      3 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>incidents</span>
+                    </>
+                  }
+                  valueColor="rgb(255, 170, 0)"
+                  secondary="1 Critical (Hydraulic Valve), 2 Warnings (CNC Vibration)"
+                  icon={<AlertTriangle size={18} color="rgb(255, 170, 0)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>RISK EXPOSURE</span>
-                    <Zap size={18} color="rgb(255, 60, 60)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(255, 60, 60)" }}>
-                    $1,760 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>/ hr</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Potential Downtime Loss Rate
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="RISK EXPOSURE"
+                  value={
+                    <>
+                      $1,760 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>/ hr</span>
+                    </>
+                  }
+                  valueColor="rgb(255, 60, 60)"
+                  secondary="Potential Downtime Loss Rate if Unmitigated"
+                  icon={<Zap size={18} color="rgb(255, 60, 60)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>AUTO-MITIGATED</span>
-                    <ShieldCheck size={18} color="rgb(0, 180, 100)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    18
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Self-Calibrated Incidents (Shift)
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="AUTO-MITIGATED"
+                  value="18"
+                  secondary="Self-Calibrated Sensor Incidents Solved This Shift"
+                  icon={<ShieldCheck size={18} color="rgb(0, 180, 100)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>SAVINGS PROTECTED</span>
-                    <TrendingUp size={18} color="rgb(0, 180, 100)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)" }}>
-                    $14,250
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Stop-Loss ROI This Month
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="SAVINGS PROTECTED"
+                  value="$14,250"
+                  valueColor="rgb(0, 180, 100)"
+                  secondary="Stop-Loss Preventive ROI Accumulated This Month"
+                  icon={<TrendingUp size={18} color="rgb(0, 180, 100)" />}
+                />
               </>
             )}
 
             {activeTab === "Energy Monitoring" && (
               <>
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>ACTIVE DEMAND</span>
-                    <Zap size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    669 kW
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Peak Load: 780 kW Max
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="ACTIVE DEMAND"
+                  value="669 kW"
+                  secondary="Peak Facility Load Capacity: 780 kW Max Limit"
+                  icon={<Zap size={18} color="var(--accent-blue)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>SOLAR GENERATION</span>
-                    <Zap size={18} color="rgb(255, 180, 0)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(255, 180, 0)" }}>
-                    140 kW
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Rooftop Array Yielding 21%
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="SOLAR GENERATION"
+                  value="140 kW"
+                  valueColor="rgb(255, 180, 0)"
+                  secondary="Rooftop Photovoltaic Array Yielding 21% Total Demand"
+                  icon={<Zap size={18} color="rgb(255, 180, 0)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>DAILY KWH COST</span>
-                    <Activity size={18} color="var(--accent-cyan)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    13,560 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>kWh</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    $1,965 Shift Power Spend
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="DAILY KWH COST"
+                  value={
+                    <>
+                      13,560 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>kWh</span>
+                    </>
+                  }
+                  secondary="$1,965 Shift Power Spend ($0.145 / kWh Grid Rate)"
+                  icon={<Activity size={18} color="var(--accent-cyan)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>CARBON INTENSITY</span>
-                    <CheckCircle2 size={18} color="rgb(0, 180, 100)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)" }}>
-                    0.32 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>kg CO₂e/kWh</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Scope 2 Emission Rate
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="CARBON INTENSITY"
+                  value={
+                    <>
+                      0.32 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>kg CO₂e/kWh</span>
+                    </>
+                  }
+                  valueColor="rgb(0, 180, 100)"
+                  secondary="Scope 2 Direct Utility Grid Emission Index"
+                  icon={<CheckCircle2 size={18} color="rgb(0, 180, 100)" />}
+                />
               </>
             )}
 
             {activeTab === "Executive Dashboard" && (
               <>
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>REGIONAL SITES</span>
-                    <Building2 size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    4 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>Active Facilities</span>
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    KL, Penang, Johor, Selangor
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="REGIONAL SITES"
+                  value={
+                    <>
+                      4 <span style={{ fontSize: "0.9rem", fontWeight: 500, color: "var(--text-secondary)" }}>Active Facilities</span>
+                    </>
+                  }
+                  secondary="Kuala Lumpur, Penang, Johor & Selangor Plant Operations"
+                  icon={<Building2 size={18} color="var(--accent-blue)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>MONTHLY UNITS</span>
-                    <TrendingUp size={18} color="var(--accent-cyan)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    214,560
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    +4.2% Above Target Goal
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="MONTHLY UNITS"
+                  value="214,560"
+                  secondary="+4.2% Above Target Production Goal for Q3"
+                  icon={<TrendingUp size={18} color="var(--accent-cyan)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>COMPLIANCE SCORE</span>
-                    <ShieldCheck size={18} color="rgb(0, 180, 100)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: "rgb(0, 180, 100)" }}>
-                    99.3%
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    ISO 50001 & Nuclear Grade
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="COMPLIANCE SCORE"
+                  value="99.3%"
+                  valueColor="rgb(0, 180, 100)"
+                  secondary="ISO 50001 Energy & Nuclear Grade Safety Rating"
+                  icon={<ShieldCheck size={18} color="rgb(0, 180, 100)" />}
+                />
 
-                <div className="feature-item" style={{ padding: "24px", background: "var(--bg-secondary)", borderRadius: "4px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span className="section-eyebrow" style={{ marginBottom: 0 }}>PLANT VELOCITY</span>
-                    <Gauge size={18} color="var(--accent-blue)" />
-                  </div>
-                  <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)" }}>
-                    98.4
-                  </div>
-                  <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "4px" }}>
-                    Operational Efficiency Index
-                  </div>
-                </div>
+                <InteractiveMetricCard
+                  label="PLANT VELOCITY"
+                  value="98.4"
+                  secondary="Aggregate Operational Speed & Throughput Score"
+                  icon={<Gauge size={18} color="var(--accent-blue)" />}
+                />
               </>
             )}
           </motion.div>

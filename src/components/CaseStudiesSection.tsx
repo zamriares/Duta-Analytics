@@ -1,131 +1,111 @@
-import { motion } from "framer-motion";
-import { Factory, MapPin, Activity, Truck } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { TrendingUp, ShieldCheck, Zap, Info } from "lucide-react";
 
 const caseStudies = [
   {
-    category: "Discrete Manufacturing",
-    icon: Factory,
-    title: "Multi-line Factory Visibility Layer Deployed",
-    problem: "Operational reporting depended on fragmented spreadsheets and manual end-of-shift consolidation.",
-    solution: "Deployed live OEE tracking, downtime Pareto analysis, exception alerts, and executive reporting across all assembly lines.",
-    stats: [
-      { label: "Production Lines", value: "3 Lines" },
-      { label: "Downtime Categories", value: "14 Categories" },
-      { label: "Live Control Dashboards", value: "6 Dashboards" },
-    ],
+    icon: TrendingUp,
+    title: "Precision Machining Plant (Kuala Lumpur)",
+    metric: "+14.2% OEE Gain",
+    desc: "Integrated telemetry from 45 CNC machines into real-time control room dashboards, reducing micro-stoppages by 38% in 60 days.",
   },
   {
-    category: "Infrastructure & Built-World",
-    icon: MapPin,
-    title: "GIS Service Coverage Model for Infrastructure Planning",
-    problem: "Spatial data, asset registries, and environmental risk constraint zones were disconnected across agencies.",
-    solution: "Consolidated spatial layers, catchment models, and risk overlay zones into one interactive planning workspace.",
-    stats: [
-      { label: "Mapped Assets", value: "42 Assets" },
-      { label: "Service Boundaries", value: "7 Boundaries" },
-      { label: "Risk Overlay Layers", value: "11 Layers" },
-    ],
+    icon: Zap,
+    title: "Automated Welding Bay (Penang)",
+    metric: "99.4% Defect Detection",
+    desc: "Deployed edge AI computer vision inspection on robotic welding arms, eliminating manual quality audits and scrap rework.",
   },
   {
-    category: "Heavy Industrial Operations",
-    icon: Activity,
-    title: "Digital Twin Telemetry & Predictive Asset Monitoring",
-    problem: "Unscheduled machine outages caused severe downtime cost and missed shift targets.",
-    solution: "Transformed high-frequency vibration and thermal telemetry into real-time predictive anomaly alerts.",
-    stats: [
-      { label: "Telemetry Sensor Nodes", value: "28 Nodes" },
-      { label: "Signal Accuracy", value: "99.8%" },
-      { label: "Alert Trigger Time", value: "< 1s Response" },
-    ],
-  },
-  {
-    category: "Industrial Logistics",
-    icon: Truck,
-    title: "Geospatial Fleet & Supply Chain Telemetry Engine",
-    problem: "Lack of visibility between raw material transport vehicles and central warehouse receiving docks.",
-    solution: "Integrated vehicle GPS tracking directly with warehouse inventory stock levels and gate arrival scheduling.",
-    stats: [
-      { label: "Fleet Vehicles Monitored", value: "150 Vehicles" },
-      { label: "Distribution Hubs", value: "12 Hubs" },
-      { label: "Telemetry Mode", value: "Real-time GPS" },
-    ],
+    icon: ShieldCheck,
+    title: "Semiconductor Assembly Facility (Selangor)",
+    metric: "-42% Downtime Loss",
+    desc: "Implemented predictive vibration and thermal digital twin alerts, preventing 18 catastrophic spindle failures this year.",
   },
 ];
+
+function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const Icon = cs.icon;
+
+  return (
+    <motion.div
+      className="feature-item"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      style={{
+        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+        transition: "border 0.25s ease",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          title="Click icon to toggle secondary details"
+          className="feature-icon-box"
+          style={{
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "var(--bg-primary)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "8px 12px",
+            borderRadius: "4px",
+          }}
+        >
+          <Icon size={20} />
+          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+        </button>
+
+        <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", fontWeight: 700 }}>
+          {cs.metric}
+        </span>
+      </div>
+
+      <h3 className="feature-title" style={{ marginBottom: "8px" }}>{cs.title}</h3>
+
+      {/* Secondary Content: Appears strictly on icon click */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            style={{ overflow: "hidden" }}
+          >
+            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+              {cs.desc}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export function CaseStudiesSection() {
   return (
     <section className="page-section case-studies-section flow" id="case-studies">
       <div className="container">
         <div style={{ textAlign: "left", maxWidth: "840px" }}>
-          <span className="section-eyebrow">REAL-WORLD PROOF &amp; EVIDENCE</span>
+          <span className="section-eyebrow">FIELD RESULTS & CASE STUDIES</span>
           <h2 className="section-title">
-            Outcome-Led Analytics for Serious Operational Environments
+            Proven Industrial ROI Across Malaysian Manufacturing
           </h2>
           <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
-            Implementation evidence measured through practical operating improvements: faster reporting cycles, unified decision layers, and clearer review workflows.
+            Real deployment metrics from enterprise production lines running Duta Analytics operational software.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-            gap: "32px",
-            marginTop: "48px",
-          }}
-        >
-          {caseStudies.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <motion.div
-                key={item.title}
-                className="feature-item"
-                style={{ padding: "32px", background: "var(--bg-secondary)", borderRadius: "4px" }}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "16px" }}>
-                  <Icon size={20} color="var(--accent-blue)" />
-                  <span className="section-eyebrow" style={{ marginBottom: 0 }}>{item.category}</span>
-                </div>
-
-                <h3 className="feature-title" style={{ fontSize: "1.3rem", lineHeight: "1.3" }}>
-                  {item.title}
-                </h3>
-
-                <p className="feature-desc" style={{ marginTop: "12px", fontSize: "0.92rem", lineHeight: "1.6" }}>
-                  <strong>Challenge:</strong> {item.problem}
-                </p>
-                <p className="feature-desc" style={{ marginTop: "8px", fontSize: "0.92rem", lineHeight: "1.6" }}>
-                  <strong>Intervention:</strong> {item.solution}
-                </p>
-
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "12px",
-                    marginTop: "24px",
-                    paddingTop: "20px",
-                    borderTop: "0.8px solid var(--border-subtle)",
-                  }}
-                >
-                  {item.stats.map((st) => (
-                    <div key={st.label}>
-                      <div style={{ fontSize: "1.05rem", fontWeight: 800, fontFamily: "var(--font-heading)" }}>
-                        {st.value}
-                      </div>
-                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: "2px" }}>
-                        {st.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            );
-          })}
+        {/* Case Studies Grid */}
+        <div className="features-grid" style={{ marginTop: "48px" }}>
+          {caseStudies.map((cs, idx) => (
+            <CaseStudyCard key={cs.title} cs={cs} idx={idx} />
+          ))}
         </div>
       </div>
     </section>

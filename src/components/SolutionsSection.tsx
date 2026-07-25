@@ -1,115 +1,137 @@
-import { motion } from "framer-motion";
-import { Factory, MapPin, BrainCircuit, Box } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Cpu,
+  Eye,
+  MapPin,
+  Boxes,
+  Info,
+} from "lucide-react";
 
 const solutionCards = [
   {
-    icon: Factory,
-    title: "Manufacturing SaaS / Factory Visibility",
-    desc: "Unified operational layer for production, quality, downtime, maintenance, and leadership reporting.",
-    bullets: [
-      "Line performance & OEE monitoring",
-      "Downtime and maintenance signal tracking",
-      "Quality variance & rework analytics",
-      "Shift, asset, and multi-plant reporting",
-    ],
+    icon: Cpu,
+    title: "Factory Telemetry & Process SaaS",
+    desc: "Connect machine sensors, PLC signals, and downtime logs into unified operational dashboards for plant managers.",
+    bullets: ["Live OEE tracking", "Downtime root cause tagging", "Shift performance metrics"],
+  },
+  {
+    icon: Eye,
+    title: "AI Computer Vision Inspection",
+    desc: "Deploy neural vision models at production speed to detect surface flaws, assembly errors, and safety compliance.",
+    bullets: ["Sub-millimeter defect detection", "Real-time edge inference", "Automated alert triggers"],
   },
   {
     icon: MapPin,
-    title: "GIS Services / Spatial Analysis",
-    desc: "Location intelligence for physical assets, service coverage, site risk, and infrastructure planning.",
-    bullets: [
-      "Asset & site geospatial mapping",
-      "Service-area & catchment analysis",
-      "Risk & environmental constraint overlays",
-      "Field-ready spatial data workflows",
-    ],
+    title: "Spatial GIS & Site Intelligence",
+    desc: "Map physical assets, logistics paths, and environmental sensors onto interactive spatial digital maps.",
+    bullets: ["Geospatial asset tracking", "Site heatmaps & density", "Multi-facility overview"],
   },
   {
-    icon: BrainCircuit,
-    title: "AI-Assisted Analytics / Decision Intelligence",
-    desc: "Analytical workflows that convert live signals, historical patterns, and domain rules into prioritized action.",
-    bullets: [
-      "Real-time exception monitoring",
-      "Automated performance narratives",
-      "Root-cause indicator synthesis",
-      "AI-recommended next actions",
-    ],
-  },
-  {
-    icon: Box,
-    title: "Digital Twin / Industrial Digital Twin",
-    desc: "Structured operating model of sites, assets, process flows, and performance signals for executive review.",
-    bullets: [
-      "Asset & process digital modeling",
-      "Live signal & telemetry relationships",
-      "What-if scenario comparison",
-      "Operational simulation readiness",
-    ],
+    icon: Boxes,
+    title: "3D Asset & Digital Twin Modeling",
+    desc: "Create interactive 3D digital twins of production lines to simulate workflows and monitor live equipment state.",
+    bullets: ["Web-based 3D scene viewer", "Sensor-linked mesh state", "Predictive maintenance simulation"],
   },
 ];
 
-const implementationSteps = [
-  { step: "01", name: "Scope Map", detail: "Define operating questions & physical site parameters" },
-  { step: "02", name: "Data Layer", detail: "Connect machine telemetry, ERP exports & spatial GIS" },
-  { step: "03", name: "Signal Logic", detail: "Deploy exception rules, OEE algorithms & AI models" },
-  { step: "04", name: "Live Workflow", detail: "Empower control rooms with real-time operational action" },
-];
+function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const Icon = sol.icon;
+
+  return (
+    <motion.div
+      className="feature-item"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
+      style={{
+        border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+        transition: "border 0.25s ease",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          title="Click icon to toggle secondary details"
+          className="feature-icon-box"
+          style={{
+            background: isOpen ? "rgba(0, 240, 255, 0.2)" : "var(--bg-primary)",
+            border: isOpen ? "1px solid var(--accent-cyan)" : "1px solid var(--border-subtle)",
+            color: isOpen ? "var(--accent-cyan)" : "var(--text-primary)",
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "8px 12px",
+            borderRadius: "4px",
+          }}
+        >
+          <Icon size={20} />
+          <Info size={13} style={{ color: isOpen ? "var(--accent-cyan)" : "var(--text-secondary)" }} />
+        </button>
+      </div>
+
+      <h3 className="feature-title" style={{ marginBottom: "8px" }}>{sol.title}</h3>
+
+      {/* Secondary Content: Appears strictly on icon click */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            style={{ overflow: "hidden" }}
+          >
+            <p className="feature-desc" style={{ marginBottom: "16px", fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+              {sol.desc}
+            </p>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {sol.bullets.map((b) => (
+                <li
+                  key={b}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    fontSize: "0.85rem",
+                    color: "var(--text-secondary)",
+                    marginBottom: "8px",
+                  }}
+                >
+                  <span style={{ width: "4px", height: "4px", background: "var(--accent-cyan)", borderRadius: "50%" }} />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
 
 export function SolutionsSection() {
   return (
     <section className="page-section solutions-section flow" id="solutions">
       <div className="container">
-        <div style={{ textAlign: "left", maxWidth: "800px" }}>
-          <span className="section-eyebrow">DECISION SYSTEMS</span>
+        <div style={{ textAlign: "left", maxWidth: "840px" }}>
+          <span className="section-eyebrow">INTEGRATED PLATFORM MODULES</span>
           <h2 className="section-title">
-            Practical Analytics Solutions for Physical Operations
+            Core Modules Built for Factory Scale
           </h2>
           <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
-            Trusted operational visibility, spatial context, and AI-assisted decision support across physical assets, factories, and infrastructure networks.
+            Four interconnected engineering layers that transform raw operational signals into high-impact control room software.
           </p>
         </div>
 
         {/* 4 Main Solutions Grid */}
         <div className="features-grid" style={{ marginTop: "48px" }}>
-          {solutionCards.map((sol, idx) => {
-            const Icon = sol.icon;
-            return (
-              <motion.div
-                key={sol.title}
-                className="feature-item"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 * idx, duration: 0.6, ease: "easeOut" }}
-              >
-                <div className="feature-icon-box">
-                  <Icon size={20} />
-                </div>
-                <h3 className="feature-title">{sol.title}</h3>
-                <p className="feature-desc" style={{ marginBottom: "20px" }}>
-                  {sol.desc}
-                </p>
-                <ul style={{ listStyle: "none", padding: 0 }}>
-                  {sol.bullets.map((b) => (
-                    <li
-                      key={b}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        fontSize: "0.88rem",
-                        color: "var(--text-secondary)",
-                        marginBottom: "8px",
-                      }}
-                    >
-                      <span style={{ width: "4px", height: "4px", background: "var(--accent-blue)", borderRadius: "50%" }} />
-                      <span>{b}</span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            );
-          })}
+          {solutionCards.map((sol, idx) => (
+            <SolutionCard key={sol.title} sol={sol} idx={idx} />
+          ))}
         </div>
 
         {/* Implementation Path Grid */}
@@ -119,20 +141,38 @@ export function SolutionsSection() {
             From Scattered Data to Operational Decision Workflows
           </h3>
 
-          <div className="process-grid" style={{ marginTop: "32px" }}>
-            {implementationSteps.map((s, idx) => (
-              <motion.div
-                key={s.step}
-                className="process-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 * idx }}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+              gap: "24px",
+              marginTop: "32px",
+            }}
+          >
+            {[
+              { step: "01", title: "Signal Capture", text: "Ingest PLC, camera streams, and GIS layers into edge gateways." },
+              { step: "02", title: "Context Fusion", text: "Link telemetry to 3D spatial models and production schedules." },
+              { step: "03", title: "Control Room SaaS", text: "Deliver role-based dashboards and automated action triggers." },
+            ].map((st) => (
+              <div
+                key={st.step}
+                style={{
+                  padding: "24px",
+                  background: "var(--bg-secondary)",
+                  borderRadius: "4px",
+                  border: "0.8px solid var(--border-subtle)",
+                }}
               >
-                <div className="step-num">{s.step}</div>
-                <h4 className="step-title">{s.name}</h4>
-                <p className="step-desc">{s.detail}</p>
-              </motion.div>
+                <div style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}>
+                  {st.step}
+                </div>
+                <h4 style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}>
+                  {st.title}
+                </h4>
+                <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", margin: 0 }}>
+                  {st.text}
+                </p>
+              </div>
             ))}
           </div>
         </div>
