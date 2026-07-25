@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
   Play,
@@ -19,6 +19,12 @@ import {
   Boxes,
   Zap,
   ChevronRight,
+  Factory,
+  Truck,
+  Flame,
+  TreePalm,
+  Building2,
+  ChevronDown,
 } from "lucide-react";
 
 const visionCapabilities = [
@@ -44,15 +50,62 @@ const visionWorkflow = [
   "7. Alerts & Reports",
 ];
 
-const industries = [
-  "Manufacturing",
-  "Smart Factory",
-  "Warehousing",
-  "Utilities",
-  "Logistics",
-  "Oil & Gas",
-  "Palm Oil",
-  "Infrastructure",
+interface EnvironmentItem {
+  title: string;
+  icon: any;
+  color: string;
+  desc: string;
+}
+
+const targetEnvironments: EnvironmentItem[] = [
+  {
+    title: "Manufacturing",
+    icon: Factory,
+    color: "var(--accent-cyan)",
+    desc: "Automate surface flaw detection, high-speed dimensional tolerance checks, and robotic assembly line verification in high-volume production facilities.",
+  },
+  {
+    title: "Smart Factory",
+    icon: Cpu,
+    color: "var(--accent-blue)",
+    desc: "Connect camera nodes to edge AI gateways for real-time OEE tracking, automated cycle time auditing, and continuous digital twin mesh synchronization.",
+  },
+  {
+    title: "Warehousing",
+    icon: Boxes,
+    color: "rgb(0, 180, 100)",
+    desc: "Track pallet movements, barcode OCR reading, container stacking density, and automated guided vehicle (AGV) navigational safety zones.",
+  },
+  {
+    title: "Utilities",
+    icon: Zap,
+    color: "rgb(255, 170, 0)",
+    desc: "Monitor high-voltage electrical substations, water treatment valve positions, and thermal hot-spot anomalies automatically 24/7.",
+  },
+  {
+    title: "Logistics",
+    icon: Truck,
+    color: "var(--accent-cyan)",
+    desc: "Digitize dock bay loading efficiency, vehicle license plate recognition (ALPR), and cargo volume utilization across logistics hubs.",
+  },
+  {
+    title: "Oil & Gas",
+    icon: Flame,
+    color: "rgb(255, 60, 60)",
+    desc: "Audit worker PPE compliance (hard hats, flame-retardant vests), flare stack flame monitoring, and hazardous zone intrusion alerts.",
+  },
+  {
+    title: "Palm Oil",
+    icon: TreePalm,
+    color: "rgb(0, 180, 100)",
+    desc: "Automate fresh fruit bunch (FFB) grading, oil extraction conveyor flow monitoring, and steam boiler pressure gauge OCR reading.",
+  },
+  {
+    title: "Infrastructure",
+    icon: Building2,
+    color: "var(--accent-blue)",
+    desc: "Inspect structural concrete micro-cracks, perimeter security breaches, and heavy equipment spatial proximity safety boundaries.",
+  },
 ];
 
 const cctvComparison = [
@@ -63,10 +116,80 @@ const cctvComparison = [
   { traditional: "DVR video wall clutter", vision: "Unified operational dashboard" },
 ];
 
+function TargetEnvironmentCard({ item, idx, isSelected, onSelect }: { item: EnvironmentItem; idx: number; isSelected: boolean; onSelect: () => void }) {
+  const IconComponent = item.icon;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      whileHover={{ y: -4, scale: 1.015 }}
+      transition={{
+        delay: 0.05 * idx,
+        type: "spring",
+        stiffness: 400,
+        damping: 22,
+      }}
+      onClick={onSelect}
+      style={{
+        padding: "18px 0 22px 0",
+        background: "transparent",
+        border: "none",
+        borderBottom: isSelected ? "2.5px solid #000000" : "1px solid #666666",
+        cursor: "pointer",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <IconComponent size={20} color={item.color} />
+          <h4 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", color: isSelected ? "#000000" : "var(--text-primary)" }}>
+            {item.title}
+          </h4>
+        </div>
+
+        <div
+          title="Click to toggle explanation"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "4px",
+            fontSize: "0.75rem",
+            fontFamily: "var(--font-mono)",
+            fontWeight: 700,
+            color: isSelected ? "#000000" : "var(--text-secondary)",
+          }}
+        >
+          <span>{isSelected ? "ACTIVE" : "EXPAND"}</span>
+          <ChevronDown size={14} style={{ transform: isSelected ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.25s ease" }} />
+        </div>
+      </div>
+
+      {/* Explanation text: Appears strictly when selected */}
+      <AnimatePresence>
+        {isSelected && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 12 }}
+            exit={{ opacity: 0, height: 0, marginTop: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            style={{ overflow: "hidden" }}
+          >
+            <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+              {item.desc}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+}
+
 export function VisionSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [selectedEnv, setSelectedEnv] = useState<string>("Manufacturing");
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -481,18 +604,29 @@ export function VisionSection() {
           </div>
         </div>
 
-        {/* Industries Served */}
+        {/* Target Operational Environments with Active Tabs & Explanation Text */}
         <div style={{ marginTop: "96px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">TARGET OPERATIONAL ENVIRONMENTS</span>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "16px" }}>
-            {industries.map((ind) => (
-              <span
-                key={ind}
-                className="hero-badge"
-                style={{ marginBottom: 0, textTransform: "none", fontSize: "0.8rem", padding: "8px 16px" }}
-              >
-                {ind}
-              </span>
+          <h3 className="section-title" style={{ fontSize: "2rem", marginBottom: "24px" }}>
+            Proven Computer Vision AI Deployments Across Key Sectors
+          </h3>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+              gap: "24px",
+              marginTop: "28px",
+            }}
+          >
+            {targetEnvironments.map((envItem, idx) => (
+              <TargetEnvironmentCard
+                key={envItem.title}
+                item={envItem}
+                idx={idx}
+                isSelected={selectedEnv === envItem.title}
+                onSelect={() => setSelectedEnv(selectedEnv === envItem.title ? "" : envItem.title)}
+              />
             ))}
           </div>
         </div>
