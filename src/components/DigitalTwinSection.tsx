@@ -80,7 +80,7 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
       </div>
 
       {/* ONLY TITLE VISIBLE BY DEFAULT */}
-      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "clamp(1.02rem, 2vw, 1.25rem)", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {feature.title}
       </h3>
 
@@ -94,7 +94,7 @@ function DigitalTwinCard({ feature, idx }: { feature: typeof digitalTwinFeatures
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+            <p className="feature-desc" style={{ fontSize: "clamp(0.85rem, 1.5vw, 0.92rem)", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
               {feature.desc}
             </p>
           </motion.div>
@@ -113,7 +113,7 @@ export function DigitalTwinSection() {
           <h2 className="section-title">
             Live 3D Digital Twins of Physical Operations
           </h2>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.92rem, 1.8vw, 1.15rem)" }}>
             Transform CAD engineering files into interactive 3D digital twin models driven by live telemetry and AI predictions.
           </p>
         </div>

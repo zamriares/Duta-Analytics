@@ -36,16 +36,16 @@ export function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <span className="vectr-brand-dot" />
-              <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "var(--text-primary)", letterSpacing: "0.05em", fontFamily: "var(--font-heading)" }}>
+              <span style={{ fontWeight: 800, fontSize: "clamp(0.95rem, 2vw, 1.1rem)", color: "var(--text-primary)", letterSpacing: "0.05em", fontFamily: "var(--font-heading)" }}>
                 DUTA ANALYTICS SDN BHD
               </span>
             </div>
 
-            <p style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
+            <p style={{ fontSize: "clamp(0.8rem, 1.4vw, 0.88rem)", color: "var(--text-secondary)", lineHeight: "1.6", margin: 0 }}>
               Manufacturing SaaS, GIS site intelligence, Vision AI inspection, and 3D Digital Twins for enterprise industrial operations.
             </p>
 
-            <div style={{ fontSize: "0.88rem", color: "var(--text-secondary)", marginTop: "8px" }}>
+            <div style={{ fontSize: "clamp(0.8rem, 1.4vw, 0.88rem)", color: "var(--text-secondary)", marginTop: "8px" }}>
               Email:{" "}
               <a
                 href="mailto:admin@dutaanalytics.com"
@@ -65,7 +65,7 @@ export function Footer() {
           <div>
             <div
               style={{
-                fontSize: "0.78rem",
+                fontSize: "clamp(0.68rem, 1.4vw, 0.78rem)",
                 fontFamily: "var(--font-mono)",
                 color: "var(--text-secondary)",
                 fontWeight: 700,
@@ -83,7 +83,7 @@ export function Footer() {
                     onMouseEnter={() => setHoveredLink(link.label)}
                     onMouseLeave={() => setHoveredLink(null)}
                     style={{
-                      fontSize: "0.9rem",
+                      fontSize: "clamp(0.82rem, 1.5vw, 0.9rem)",
                       color: hoveredLink === link.label ? "var(--accent-cyan)" : "var(--text-secondary)",
                       textDecoration: "none",
                       transition: "all 0.2s ease",
@@ -105,7 +105,7 @@ export function Footer() {
           <div>
             <div
               style={{
-                fontSize: "0.78rem",
+                fontSize: "clamp(0.68rem, 1.4vw, 0.78rem)",
                 fontFamily: "var(--font-mono)",
                 color: "var(--text-secondary)",
                 fontWeight: 700,
@@ -123,7 +123,7 @@ export function Footer() {
                     onMouseEnter={() => setHoveredLink(link.label)}
                     onMouseLeave={() => setHoveredLink(null)}
                     style={{
-                      fontSize: "0.9rem",
+                      fontSize: "clamp(0.82rem, 1.5vw, 0.9rem)",
                       color: hoveredLink === link.label ? "var(--accent-cyan)" : "var(--text-secondary)",
                       textDecoration: "none",
                       transition: "all 0.2s ease",
@@ -145,7 +145,7 @@ export function Footer() {
           <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             <div
               style={{
-                fontSize: "0.78rem",
+                fontSize: "clamp(0.68rem, 1.4vw, 0.78rem)",
                 fontFamily: "var(--font-mono)",
                 color: "var(--text-secondary)",
                 fontWeight: 700,
@@ -154,7 +154,7 @@ export function Footer() {
             >
               EXPLORE SOLUTIONS
             </div>
-            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
+            <p style={{ fontSize: "clamp(0.78rem, 1.4vw, 0.85rem)", color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
               Ready to transform your plant telemetry and video feeds into automated operational decision workflows?
             </p>
             <div>
@@ -165,7 +165,7 @@ export function Footer() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: "8px",
-                  fontSize: "0.85rem",
+                  fontSize: "clamp(0.78rem, 1.4vw, 0.85rem)",
                   padding: "10px 18px",
                   borderRadius: "4px",
                 }}
@@ -187,7 +187,7 @@ export function Footer() {
             alignItems: "center",
             flexWrap: "wrap",
             gap: "16px",
-            fontSize: "0.8rem",
+            fontSize: "clamp(0.72rem, 1.4vw, 0.8rem)",
             color: "var(--text-muted)",
           }}
         >

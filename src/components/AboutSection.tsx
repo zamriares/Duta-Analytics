@@ -35,7 +35,7 @@ export function AboutSection() {
           <h2 className="section-title">
             Industrial Intelligence for Teams Operating in the Physical World
           </h2>
-          <p className="feature-desc" style={{ marginTop: "16px", fontSize: "1.15rem", lineHeight: "1.7" }}>
+          <p className="feature-desc" style={{ marginTop: "16px", fontSize: "clamp(0.95rem, 1.8vw, 1.15rem)", lineHeight: "1.7" }}>
             Duta Analytics builds analytics platforms for manufacturers, infrastructure operators, consultants, and built-world teams. The focus is clearer visibility across sites, assets, production lines, and operational decisions.
           </p>
         </div>
@@ -44,7 +44,7 @@ export function AboutSection() {
         <motion.div
           style={{
             marginTop: "40px",
-            padding: "36px",
+            padding: "clamp(18px, 4vw, 36px)",
             background: "var(--bg-secondary)",
             border: "0.8px solid var(--border-subtle)",
             borderRadius: "4px",
@@ -53,15 +53,15 @@ export function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h3 className="feature-title" style={{ fontSize: "1.3rem" }}>
+          <h3 className="feature-title" style={{ fontSize: "clamp(1.1rem, 2vw, 1.3rem)" }}>
             Moving Organizations Beyond Fragmented Data
           </h3>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1rem", lineHeight: "1.7" }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.88rem, 1.5vw, 1rem)", lineHeight: "1.7" }}>
             We work at the intersection of manufacturing analytics, spatial intelligence, and custom software development. We help organizations move from fragmented spreadsheets, isolated machine data, manual reporting, and disconnected site information into structured decision systems.
           </p>
 
           <div style={{ marginTop: "28px" }}>
-            <span className="section-eyebrow" style={{ fontSize: "0.7rem" }}>CORE FOCUS AREAS</span>
+            <span className="section-eyebrow" style={{ fontSize: "clamp(0.68rem, 1.5vw, 0.75rem)" }}>CORE FOCUS AREAS</span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
               {focusAreas.map((f) => (
                 <motion.span
@@ -81,7 +81,7 @@ export function AboutSection() {
                     padding: "8px 16px",
                     background: "transparent",
                     border: "none",
-                    fontSize: "0.85rem",
+                    fontSize: "clamp(0.78rem, 1.5vw, 0.85rem)",
                     fontWeight: 600,
                     borderRadius: "6px",
                     display: "inline-flex",
@@ -102,7 +102,7 @@ export function AboutSection() {
         {/* Operating Principles Grid */}
         <div style={{ marginTop: "64px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">OUR OPERATING PRINCIPLES</span>
-          <h3 className="section-title" style={{ fontSize: "2rem" }}>
+          <h3 className="section-title" style={{ fontSize: "clamp(1.35rem, 3.5vw, 2rem)" }}>
             Engineered for Floor Operators &amp; Executive Leadership
           </h3>
 

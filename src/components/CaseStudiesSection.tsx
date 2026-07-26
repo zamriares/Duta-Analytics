@@ -55,7 +55,7 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
           <div className="feature-icon-box" style={{ marginBottom: 0 }}>
             <Icon size={20} />
           </div>
-          <span style={{ fontSize: "0.82rem", fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", fontWeight: 700 }}>
+          <span style={{ fontSize: "clamp(0.72rem, 1.5vw, 0.82rem)", fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", fontWeight: 700 }}>
             {cs.metric}
           </span>
         </div>
@@ -67,7 +67,7 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
             alignItems: "center",
             gap: "5px",
             padding: "4px 8px",
-            fontSize: "0.75rem",
+            fontSize: "clamp(0.68rem, 1.4vw, 0.75rem)",
             fontFamily: "var(--font-mono)",
             fontWeight: 700,
             borderRadius: "4px",
@@ -83,7 +83,7 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
       </div>
 
       {/* ONLY TITLE VISIBLE BY DEFAULT */}
-      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "clamp(1.02rem, 2vw, 1.22rem)", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {cs.title}
       </h3>
 
@@ -97,7 +97,7 @@ function CaseStudyCard({ cs, idx }: { cs: typeof caseStudies[0]; idx: number }) 
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
+            <p className="feature-desc" style={{ fontSize: "clamp(0.85rem, 1.5vw, 0.92rem)", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
               {cs.desc}
             </p>
           </motion.div>
@@ -116,7 +116,7 @@ export function CaseStudiesSection() {
           <h2 className="section-title">
             Proven Industrial ROI Across Malaysian Manufacturing
           </h2>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.92rem, 1.8vw, 1.15rem)" }}>
             Real deployment metrics from enterprise production lines running Duta Analytics operational software.
           </p>
         </div>

@@ -17,6 +17,7 @@ import { CaseStudiesSection } from "./components/CaseStudiesSection";
 import { StandardsSection } from "./components/StandardsSection";
 import { ContactSection } from "./components/ContactSection";
 import { Footer } from "./components/Footer";
+import { ErrorLogViewer } from "./components/ErrorLogViewer";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -101,8 +102,10 @@ export function App() {
         <ContactSection />
       </main>
       <Footer />
+      <ErrorLogViewer />
     </div>
   );
 }
 
 export default App;
+

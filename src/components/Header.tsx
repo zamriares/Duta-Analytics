@@ -17,7 +17,7 @@ export function Header() {
 
   return (
     <header className="vectr-header">
-      <a href="#" className="vectr-brand" onClick={() => setActiveNav(null)}>
+      <a href="#" className="vectr-brand" onClick={() => setActiveNav(null)} style={{ fontSize: "clamp(0.95rem, 2.5vw, 1.1rem)" }}>
         <span>DUTA ANALYTICS</span>
       </a>
 
@@ -31,6 +31,7 @@ export function Header() {
               href={link.href}
               onClick={() => setActiveNav(link.href)}
               className={`vectr-nav-link ${isSelected ? "active" : ""}`}
+              style={{ fontSize: "clamp(0.8rem, 1.2vw, 0.88rem)" }}
             >
               {link.label}
             </a>
@@ -70,12 +71,14 @@ export function Header() {
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
             borderBottom: "none",
-            padding: "24px 20px",
+            padding: "clamp(16px, 4vw, 24px) clamp(16px, 4vw, 20px)",
             display: "flex",
             flexDirection: "column",
-            gap: "16px",
+            gap: "12px",
             boxShadow: "0 20px 40px rgba(0,0,0,0.12)",
             zIndex: 999,
+            maxHeight: "80vh",
+            overflowY: "auto",
           }}
         >
           {navLinks.map((link) => {
@@ -89,11 +92,11 @@ export function Header() {
                   setIsMobileMenuOpen(false);
                 }}
                 style={{
-                  fontSize: "1rem",
+                  fontSize: "clamp(0.9rem, 3.8vw, 1.05rem)",
                   fontWeight: 600,
                   color: isSelected ? "#000000" : "#475569",
                   textDecoration: "none",
-                  padding: "10px 0",
+                  padding: "8px 0",
                   borderBottom: isSelected ? "2.5px solid #000000" : "1px solid #cbd5e1",
                   display: "flex",
                   justifyContent: "space-between",

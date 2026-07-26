@@ -63,7 +63,7 @@ export function ContactSection() {
           <h2 className="section-title">
             Discuss a Manufacturing SaaS, Vision AI, GIS, or Digital Twin Project
           </h2>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.92rem, 1.8vw, 1.15rem)" }}>
             Share your operational challenge, data sources, and decision workflow you want to improve.
           </p>
         </div>
@@ -75,7 +75,7 @@ export function ContactSection() {
             background: "var(--bg-secondary)",
             border: "0.8px solid var(--border-subtle)",
             borderRadius: "6px",
-            padding: "40px",
+            padding: "clamp(20px, 4vw, 40px)",
           }}
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,7 +98,7 @@ export function ContactSection() {
               >
                 <CheckCircle2 size={28} />
               </div>
-              <h3 className="feature-title" style={{ fontSize: "1.5rem" }}>
+              <h3 className="feature-title" style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.5rem)" }}>
                 Inquiry Received
               </h3>
               <p className="feature-desc" style={{ marginTop: "8px" }}>
@@ -152,7 +152,7 @@ export function ContactSection() {
                 </div>
               )}
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "20px" }}>
                 <div>
                   <label
                     htmlFor="name"

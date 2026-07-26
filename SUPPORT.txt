@@ -1,0 +1,760 @@
+================================================================================
+  DUTA ANALYTICS WEB2 — SYSTEM SUPPORT & TROUBLESHOOTING GUIDE
+  Document Version : 1.0
+  Last Updated     : 26 July 2026
+  Author           : Duta Analytics Engineering
+================================================================================
+
+
+TABLE OF CONTENTS
+─────────────────
+  1.  PROJECT OVERVIEW
+  2.  TECHNOLOGY STACK
+  3.  COMPLETE FILE TREE & DESCRIPTIONS
+  4.  APPLICATION BOOT SEQUENCE
+  5.  COMPONENT ARCHITECTURE MAP
+  6.  DATA FLOW & DEPENDENCIES
+  7.  STYLING SYSTEM
+  8.  SCROLL & ANIMATION ENGINE
+  9.  ERROR LOGGING SYSTEM
+  10. BUILD & DEPLOYMENT
+  11. COMMON ISSUES & TROUBLESHOOTING
+  12. ENVIRONMENT REQUIREMENTS
+
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+  Duta Analytics Web2 is a single-page marketing and product showcase website
+  for Duta Analytics Sdn Bhd. It presents industrial SaaS products including:
+
+    - Factory Telemetry & Process Dashboards
+    - Enterprise A.I Vision Inspection
+    - Spatial GIS & Site Intelligence
+    - 3D Asset & Digital Twin Modeling
+
+  The site is a static front-end application (no backend server). It uses a
+  contact form powered by Formspree (third-party form endpoint).
+
+  Live URL : https://www.dutaanalytics.com/
+
+
+================================================================================
+2. TECHNOLOGY STACK
+================================================================================
+
+  Category          | Technology                | Version
+  ──────────────────|───────────────────────────|──────────
+  Framework         | React                     | 19.x
+  Build Tool        | Vite                      | 8.x
+  Language          | TypeScript                | 6.x
+  Smooth Scroll     | Lenis                     | 1.x
+  Animation         | GSAP (ScrollTrigger)      | 3.x
+  Motion Library    | Framer Motion             | 12.x
+  3D Rendering      | Three.js                  | 0.185.x
+  Icons             | Lucide React              | 1.x
+  Linter            | OxLint                    | 1.x
+  Package Manager   | npm / pnpm (both locks)   | —
+  Form Backend      | Formspree                 | External
+
+
+================================================================================
+3. COMPLETE FILE TREE & DESCRIPTIONS
+================================================================================
+
+  Below is every file in the project with its purpose explained.
+
+
+  ROOT CONFIGURATION FILES
+  ────────────────────────
+
+  index.html
+    Entry HTML file loaded by the browser. Contains:
+      - Viewport meta tag for responsive scaling
+      - SEO meta tags (title, description, keywords, robots)
+      - Open Graph / Facebook / LinkedIn social sharing tags
+      - Twitter Card social sharing tags
+      - Google Structured Data (JSON-LD) for rich search snippets
+      - Google Fonts preconnect links (Inter, Outfit, Space Grotesk)
+      - Root <div id="root"> mount point for React
+      - Script tag loading src/main.tsx
+
+  package.json
+    NPM project manifest. Defines:
+      - Project name: "dutaanalyticsweb2"
+      - Scripts: dev, start, build, lint, preview
+      - All runtime dependencies (react, three, gsap, lenis, etc.)
+      - All dev dependencies (vite, typescript, oxlint, etc.)
+
+  vite.config.ts
+    Vite build tool configuration. Currently minimal:
+      - Loads @vitejs/plugin-react for JSX/TSX support
+
+  tsconfig.json
+    Root TypeScript config. References:
+      - tsconfig.app.json (application source code)
+      - tsconfig.node.json (Node/Vite tooling code)
+
+  tsconfig.app.json
+    TypeScript config for src/ application code.
+    Compiler options include strict mode, JSX react-jsx, path aliases.
+
+  tsconfig.node.json
+    TypeScript config for Vite config file itself.
+
+  .oxlintrc.json
+    OxLint (Rust-based linter) configuration for code quality checks.
+
+  .gitignore
+    Specifies files excluded from Git tracking (node_modules, dist, etc.)
+
+  pnpm-workspace.yaml
+    pnpm workspace configuration (single package workspace).
+
+  pnpm-lock.yaml / package-lock.json
+    Lock files for reproducible dependency installs.
+
+  README.md
+    Basic project readme.
+
+  contents.md
+    Internal content reference document for website copy/text.
+
+
+  PUBLIC STATIC ASSETS — public/
+  ───────────────────────────────
+
+  public/favicon.svg
+    Browser tab icon. SVG format for sharp rendering at all sizes.
+
+  public/robots.txt
+    Search engine crawler instructions. Allows all crawlers, links sitemap.
+
+  public/sitemap.xml
+    XML sitemap listing all page URLs for search engine indexing.
+
+  public/assets/dashboard_video.mp4
+    Video file (20 MB) showing the live control room dashboard recording.
+    Referenced by: DashboardVideoSection.tsx
+
+  public/assets/vision_intel_video.mp4
+    Video file (34 MB) showing A.I vision inspection in action.
+    Referenced by: VisionSection.tsx
+
+  public/assets/nuclear_grade_standards.jpg
+    Background photograph for the Standards/Reliability section banner.
+    Referenced by: StandardsSection.tsx
+
+  public/assets/WebAssetLidarTopo.webp / .png
+    LiDAR topographic map image used in the Spatial GIS section.
+    Referenced by: SpatialSection.tsx
+
+  public/assets/hero-model.glb / .gltf
+    3D model files (GLTF format) for the hero section 3D scene.
+    Referenced by: Hero3DScene.tsx, MonoWhiteFactory3D.tsx
+
+  public/assets/frames/frame_0001.webp — frame_0300.webp
+    300 WebP image frames forming a scroll-driven animation sequence.
+    These are preloaded and drawn to a <canvas> element as the user
+    scrolls through the hero section, creating a cinematic parallax
+    reveal effect (black dots expanding into the factory scene).
+    Referenced by: HeroFrameCanvas.tsx
+
+
+  SOURCE CODE — src/
+  ──────────────────
+
+  src/main.tsx
+    APPLICATION ENTRY POINT. This is the first code that runs.
+    Execution order:
+      1. Imports errorLogger and installs global error listeners
+      2. Forces scroll restoration to top of page
+      3. Creates React root on <div id="root">
+      4. Renders <StrictMode> → <ErrorBoundary> → <App />
+
+    Links to:
+      → src/errorLogger.ts (installs global error capture)
+      → src/components/ErrorBoundary.tsx (wraps entire app)
+      → src/App.tsx (main application component)
+      → src/index.css (global stylesheet)
+
+  src/App.tsx
+    MAIN APPLICATION COMPONENT. Orchestrates all sections.
+    On mount (useEffect):
+      1. Forces scroll to top
+      2. Initialises Lenis smooth scroll engine
+      3. Syncs Lenis with GSAP ScrollTrigger ticker
+      4. Sets up IntersectionObserver for entrance animations
+    Render tree (in order):
+      <Loader />
+      <TechCanvas />
+      <Header />
+      <Hero />
+      <main>
+        <DashboardSection />
+        <DashboardVideoSection />
+        <SolutionsSection />
+        <SpatialSection />
+        <DigitalTwinSection />
+        <VisionSection />
+        <AboutSection />
+        <CaseStudiesSection />
+        <StandardsSection />
+        <ContactSection />
+      </main>
+      <Footer />
+      <ErrorLogViewer />
+
+  src/index.css
+    MASTER STYLESHEET & DESIGN SYSTEM. Contains:
+      - CSS custom properties (:root) for colors, spacing, typography
+      - Fluid responsive spacing tokens using clamp()
+      - Fluid dynamic typography scale (--text-xs through --text-4xl)
+      - Lenis structural CSS overrides
+      - Global element resets (*, html, body, a, button)
+      - Container utility (.container) with fluid margins
+      - Page loader styles (#loader, .loader__*)
+      - Tech canvas overlay styles (.tech-canvas)
+      - Header navigation styles (.vectr-header, .vectr-nav, etc.)
+      - Hero section layout (.hero-section, .hero-title, etc.)
+      - Section layout primitives (.page-section, .section-title, etc.)
+      - Feature card grid (.features-grid, .feature-item)
+      - Process grid (.process-grid, .process-card)
+      - Standards banner dark block (.standards-section)
+      - FAQ accordion (.faq-section, .faq-item)
+      - CTA section (.cta-section, .cta-box)
+      - Footer layout (.vectr-footer)
+      - Flow section steps (.flow, .flow__step, .flow__track)
+      - Responsive table horizontal scroll (.responsive-table-container)
+      - Media queries at 1024px, 900px, and 640px breakpoints
+
+  src/App.css
+    Legacy/secondary stylesheet from Vite scaffold.
+    Contains old counter and hero layout styles (mostly unused).
+
+  src/errorLogger.ts
+    GLOBAL ERROR CAPTURE SERVICE. Singleton module that:
+      - Listens for window "error" events (runtime JS errors)
+      - Listens for window "error" events on capture phase (resource loads)
+      - Listens for "unhandledrejection" events (Promise failures)
+      - Intercepts console.error calls
+      - Accepts manual error logs from ErrorBoundary
+      - Persists all entries to localStorage under key "duta_error_log"
+      - Enforces a rolling cap of 200 entries maximum
+      - Dispatches custom "duta-error-logged" events for live UI updates
+      - Exports: installGlobalErrorListeners(), getErrorLogs(),
+        clearErrorLogs(), exportErrorLogs(), logError()
+
+    Each log entry contains:
+      id, timestamp, type, message, source, lineno, colno,
+      stack, componentStack, url, userAgent
+
+
+  COMPONENTS — src/components/
+  ────────────────────────────
+
+  ErrorBoundary.tsx
+    React class component implementing componentDidCatch.
+    Wraps the entire application in main.tsx.
+    On crash: logs error via errorLogger.logError(), renders a
+    full-screen recovery UI with error message, stack trace, and
+    a "Reload Page" button.
+    Links to: src/errorLogger.ts
+
+  ErrorLogViewer.tsx
+    Hidden debug panel for viewing captured errors.
+    Toggle: Ctrl+Shift+E (or Cmd+Shift+E on macOS).
+    Features:
+      - Floating red badge in bottom-right when errors exist
+      - Dark-themed slide-up panel with error list
+      - Filter tabs: All, Runtime, Promise, Resource, Console, React
+      - Click any entry to expand full stack trace details
+      - Export all logs as downloadable .json file
+      - Clear all stored logs
+      - Live-updates when new errors are captured
+    Links to: src/errorLogger.ts
+
+  Loader.tsx
+    Full-screen page loading overlay displayed on initial mount.
+    Shows animated SVG cube logo + "DUTA ANALYTICS / INITIALIZING SYSTEM".
+    Auto-hides after 1200ms via CSS opacity/visibility transition.
+    Links to: index.css (#loader, .loader__*)
+
+  TechCanvas.tsx
+    Fixed full-viewport <canvas> element rendering a subtle interactive
+    background effect: light grid mesh with mouse-reactive particle nodes.
+    Sits at z-index 0 behind all content with 0.65 opacity.
+    Links to: index.css (.tech-canvas)
+
+  Header.tsx
+    Fixed-position navigation header bar. Contains:
+      - Brand logo text "DUTA ANALYTICS"
+      - Desktop navigation links (7 sections)
+      - Desktop CTA buttons ("Explore Dashboard", "Request Demo")
+      - Mobile hamburger menu toggle (visible below 900px)
+      - Mobile dropdown navigation with all links + CTAs
+    State: isMobileMenuOpen, activeNav
+    Links to: index.css (.vectr-header, .vectr-nav, .btn-pill, etc.)
+
+  Hero.tsx
+    Full-viewport hero section with scroll-driven parallax effects.
+    Contains:
+      - HeroFrameCanvas as background (scroll-driven image sequence)
+      - Animated badge "ENGINEERING INTELLIGENT DECISIONS."
+      - Main headline with accent-colored "Industrial Data"
+      - Subtitle paragraph
+      - CTA buttons ("Explore Dashboard", "Request Demo")
+      - Scroll-to-start cue with animated chevron arrows
+    Receives scroll state from HeroFrameCanvas via callback.
+    Applies smooth opacity/translateY/scale exit transitions.
+    Links to: HeroFrameCanvas.tsx, index.css (.hero-section, .hero-title)
+
+  HeroFrameCanvas.tsx
+    Scroll-driven WebP image sequence renderer.
+    Loads 300 frames (public/assets/frames/frame_0001–0300.webp).
+    Behavior:
+      - Before scroll: loops frames 5–20 as idle animation
+      - On scroll: advances through remaining frames linearly
+      - Reports frameIndex, textProgress, exitProgress to parent Hero
+    Uses GSAP ScrollTrigger for scroll position mapping.
+    Renders to an offscreen <canvas> element.
+    Links to: public/assets/frames/*, GSAP ScrollTrigger
+
+  Hero3DScene.tsx
+    Three.js 3D scene component (WebGL). Loads the hero-model.gltf/glb
+    and renders an interactive 3D factory model in the hero area.
+    Links to: public/assets/hero-model.glb, Three.js
+
+  MonoWhiteFactory3D.tsx
+    Alternative/extended 3D factory model renderer using Three.js.
+    Provides mouse-interactive rotation and material customisation.
+    Links to: public/assets/hero-model.glb, Three.js
+
+  DashboardSection.tsx
+    LARGEST COMPONENT (67 KB). Full interactive dashboard showcase with:
+      - KPI metric cards (OEE, Yield, Uptime, Revenue) with click-expand
+      - Agentic AI Neural Troubleshooter panel with machine selector
+      - Root cause analysis, action plans, diagnostic breakdowns
+      - Monthly revenue bar chart with hover tooltips
+      - Machine Performance table with status indicators
+      - OEE & Quality tables with color-coded scores
+      - Production metrics and sustainability tracking
+      - Tabbed interface switching between dashboard views
+    All data is static/hardcoded for demonstration purposes.
+    Links to: index.css, framer-motion, lucide-react icons
+
+  DashboardVideoSection.tsx
+    Video player section showing live control room recording.
+    Features browser-style top bar with traffic light dots,
+    play/pause/mute/fullscreen controls, and feature badges below.
+    Links to: public/assets/dashboard_video.mp4
+
+  SolutionsSection.tsx
+    Four expandable solution cards (click to reveal description + bullets):
+      1. Factory Telemetry & Process SaaS
+      2. Enterprise A.I Vision Inspection
+      3. Spatial GIS & Site Intelligence
+      4. 3D Asset & Digital Twin Modeling
+    Plus an "Implementation Path" 3-step process grid with
+    staggered slide-in animations.
+    Links to: framer-motion, lucide-react icons
+
+  SpatialSection.tsx
+    Spatial GIS & Plantation Intelligence showcase (28 KB). Contains:
+      - KPI stat bar (Mapped Estates, Resolution, Crop Polygons, etc.)
+      - Expandable spatial capability cards
+      - Interactive dark-themed GIS map mockup with area labels
+      - Compliance status indicators
+      - Agronomic & Crop Source Material subsection
+      - Plantation services list
+    Links to: public/assets/WebAssetLidarTopo.webp, framer-motion
+
+  DigitalTwinSection.tsx
+    Four expandable feature cards for 3D Digital Twin capabilities:
+      1. Interactive WebGL 3D Models
+      2. Sensor-Linked Mesh States
+      3. Predictive Wear Simulation
+      4. Spatial AR & VR Readiness
+    Links to: framer-motion, lucide-react icons
+
+  VisionSection.tsx
+    Enterprise A.I Vision section (24 KB). Contains:
+      - Vision capabilities badge grid (10 items)
+      - Embedded video player for vision AI demo
+      - Vision workflow step-by-step pipeline
+      - Target Operational Environments cards (8 industry sectors)
+      - CCTV vs AI Vision comparison grid
+    Links to: public/assets/vision_intel_video.mp4, framer-motion
+
+  AboutSection.tsx
+    Company information section. Contains:
+      - Section header and description
+      - Profile card with core focus area badges (7 items)
+      - Operating Principles 4-step grid
+    Links to: framer-motion, lucide-react icons
+
+  CaseStudiesSection.tsx
+    Three expandable case study cards with field deployment results:
+      1. Precision Machining Plant (Kuala Lumpur) — +14.2% OEE
+      2. Automated Welding Bay (Penang) — 99.4% Defect Detection
+      3. Semiconductor Assembly Facility (Selangor) — -42% Downtime
+    Links to: framer-motion, lucide-react icons
+
+  StandardsSection.tsx
+    Dark-themed banner section with background image overlay.
+    Displays reliability messaging and CTA link.
+    Links to: public/assets/nuclear_grade_standards.jpg, framer-motion
+
+  ContactSection.tsx
+    Contact/consultation request form (13 KB). Contains:
+      - Honeypot anti-spam hidden field
+      - Name, Email, Website, Project Focus (dropdown), Message fields
+      - Form validation and error display
+      - Submission to Formspree endpoint (https://formspree.io/f/mzdwqwpw)
+      - Success confirmation UI after submission
+    Links to: Formspree API (external), framer-motion
+
+  Footer.tsx
+    Multi-column footer with:
+      - Brand name and contact email
+      - Platform Modules navigation links (6 items)
+      - Company & Field Proof navigation links (4 items)
+      - Quick Action CTA with consultation button
+      - Copyright and legal disclaimer bar
+    Links to: lucide-react icons
+
+
+================================================================================
+4. APPLICATION BOOT SEQUENCE
+================================================================================
+
+  When a user loads the website, the following happens in order:
+
+  Step 1 — Browser loads index.html
+           Fonts begin preloading (Inter, Outfit, Space Grotesk)
+           <div id="root"> is empty
+
+  Step 2 — Vite loads src/main.tsx
+           installGlobalErrorListeners() runs immediately
+           → Attaches window error, unhandledrejection, resource error,
+             and console.error interceptors
+
+  Step 3 — React mounts <StrictMode> → <ErrorBoundary> → <App />
+
+  Step 4 — <Loader /> renders full-screen loading overlay
+           1200ms timer starts
+
+  Step 5 — <TechCanvas /> mounts, starts rendering background grid
+
+  Step 6 — <HeroFrameCanvas /> begins loading 300 WebP frames
+           Frames load in parallel via new Image() objects
+
+  Step 7 — App useEffect runs:
+           a) Lenis smooth scroll engine initialises
+           b) Lenis syncs with GSAP ScrollTrigger
+           c) IntersectionObserver attaches to section elements
+
+  Step 8 — After 1200ms, Loader fades out via CSS transition
+           User sees the hero section with frame animation
+
+  Step 9 — User scrolls → HeroFrameCanvas advances frames
+           → Lenis provides smooth momentum
+           → ScrollTrigger drives parallax transforms
+           → IntersectionObserver triggers entrance animations
+
+
+================================================================================
+5. COMPONENT ARCHITECTURE MAP
+================================================================================
+
+  main.tsx
+    └── ErrorBoundary
+         └── App
+              ├── Loader
+              ├── TechCanvas
+              ├── Header
+              ├── Hero
+              │    └── HeroFrameCanvas
+              ├── <main>
+              │    ├── DashboardSection
+              │    ├── DashboardVideoSection
+              │    ├── SolutionsSection
+              │    ├── SpatialSection
+              │    ├── DigitalTwinSection
+              │    ├── VisionSection
+              │    ├── AboutSection
+              │    ├── CaseStudiesSection
+              │    ├── StandardsSection
+              │    └── ContactSection
+              ├── Footer
+              └── ErrorLogViewer
+
+
+================================================================================
+6. DATA FLOW & DEPENDENCIES
+================================================================================
+
+  SCROLL DATA FLOW:
+  Lenis (smooth scroll) → GSAP ScrollTrigger → HeroFrameCanvas
+       ↓                                            ↓
+  Updates scroll position                 Reports frameIndex, textProgress
+       ↓                                  exitProgress to Hero component
+  IntersectionObserver                          ↓
+       ↓                                  Hero applies parallax transforms
+  Adds .show / .is-visible                to text and section opacity
+  classes on sections
+
+  ERROR DATA FLOW:
+  Window error events ─────┐
+  Unhandled rejections ────┤
+  Resource load failures ──┤──→ errorLogger.ts ──→ localStorage
+  console.error calls ─────┤                          ↓
+  ErrorBoundary catches ───┘              ErrorLogViewer reads & displays
+
+  FORM SUBMISSION FLOW:
+  ContactSection form → fetch POST → Formspree API (external)
+                                        ↓
+                                   Success/Error response
+                                        ↓
+                                   UI state update
+
+
+================================================================================
+7. STYLING SYSTEM
+================================================================================
+
+  PRIMARY STYLESHEET: src/index.css
+
+  DESIGN TOKENS (CSS Custom Properties):
+    Colors:    --bg-primary, --bg-secondary, --bg-dark, --text-primary, etc.
+    Spacing:   --space-xs through --space-4xl (all use clamp() for fluidity)
+    Typography: --text-xs through --text-4xl (all use clamp() for fluidity)
+    Fonts:     --font-heading (Outfit), --font-body (Inter), --font-mono (Space Grotesk)
+
+  RESPONSIVE BREAKPOINTS:
+    @media (max-width: 1024px)  — Tablet landscape adjustments
+    @media (max-width: 900px)   — Mobile/tablet: hide desktop nav, show hamburger
+    @media (max-width: 640px)   — Small mobile: stack buttons, shrink text
+
+  FLUID SIZING APPROACH:
+    All font sizes use CSS clamp(min, preferred, max) for smooth scaling.
+    Spacing tokens also use clamp() so padding/margins adapt dynamically.
+    Container width: min(1280px, calc(100% - clamp(20px, 4.5vw, 48px)))
+
+
+================================================================================
+8. SCROLL & ANIMATION ENGINE
+================================================================================
+
+  THREE SYSTEMS WORK TOGETHER:
+
+  1. LENIS (Smooth Scroll)
+     - Provides momentum-based smooth scrolling
+     - Duration: 1.2s, custom easing curve
+     - Synchronised with GSAP ticker via lenis.raf()
+
+  2. GSAP ScrollTrigger
+     - Maps scroll position to animation progress values
+     - Used by HeroFrameCanvas for frame-by-frame image sequence
+     - Drives hero section parallax exit transitions
+
+  3. IntersectionObserver (Native Browser API)
+     - Observes: .flow, .feature-item, .process-card, .standards-banner,
+       .faq-item, .page-section
+     - On intersection: adds .show and .is-visible CSS classes
+     - Triggers one-time entrance transitions
+
+  4. Framer Motion (React Animation Library)
+     - Used for individual component animations
+     - whileInView, whileHover, AnimatePresence for expand/collapse
+     - Spring physics for card hover effects
+
+
+================================================================================
+9. ERROR LOGGING SYSTEM
+================================================================================
+
+  PURPOSE: Captures all client-side errors for debugging.
+
+  FILES:
+    src/errorLogger.ts              — Core capture & storage service
+    src/components/ErrorBoundary.tsx — React crash boundary
+    src/components/ErrorLogViewer.tsx — Debug viewer panel
+
+  WHAT IT CAPTURES:
+    Type                  | Source
+    ─────────────────────|──────────────────────────────────────
+    runtime              | window.addEventListener("error")
+    unhandled-rejection  | window.addEventListener("unhandledrejection")
+    resource             | error event on capture phase (images/scripts/css)
+    console              | console.error() intercept
+    react-boundary       | ErrorBoundary.componentDidCatch()
+
+  STORAGE:
+    Location: localStorage key "duta_error_log"
+    Format:   JSON array of ErrorLogEntry objects
+    Max Cap:  200 entries (oldest are trimmed)
+
+  VIEWER ACCESS:
+    Keyboard shortcut: Ctrl+Shift+E (or Cmd+Shift+E)
+    Also: floating red badge in bottom-right corner when errors exist
+
+  VIEWER FEATURES:
+    - Filter by error type
+    - Click to expand full stack trace
+    - Export as .json file
+    - Clear all logs
+    - Live-updates via custom "duta-error-logged" event
+
+
+================================================================================
+10. BUILD & DEPLOYMENT
+================================================================================
+
+  DEVELOPMENT SERVER:
+    npm run dev         — Starts Vite dev server (default port 5173)
+    npm run start       — Starts Vite on 0.0.0.0 (network-accessible)
+
+  PRODUCTION BUILD:
+    npm run build       — Runs TypeScript check + Vite production build
+                          Output: dist/ directory
+                          Generates: index.html, CSS bundle, JS bundle
+
+  PREVIEW PRODUCTION BUILD:
+    npm run preview     — Serves dist/ locally for testing
+
+  LINTING:
+    npm run lint        — Runs OxLint code quality checks
+
+  DEPLOYMENT:
+    The dist/ folder is a fully static site.
+    Can be deployed to any static hosting:
+      - Vercel, Netlify, Cloudflare Pages
+      - AWS S3 + CloudFront
+      - Any web server serving static files
+
+  IMPORTANT BUILD NOTES:
+    - The JS bundle exceeds 500 KB (due to Three.js + all components)
+    - Consider code-splitting with dynamic import() for production
+    - Video files in public/assets/ are large (20–34 MB)
+    - Frame images total ~7 MB (300 WebP files)
+
+
+================================================================================
+11. COMMON ISSUES & TROUBLESHOOTING
+================================================================================
+
+  ISSUE: White/blank screen on load
+  ─────────────────────────────────
+  Possible causes:
+    a) JavaScript build error — run "npm run build" to check for TS errors
+    b) Missing dependencies — run "npm install" to restore node_modules
+    c) ErrorBoundary caught a crash — check Ctrl+Shift+E error log panel
+    d) index.html missing or wrong path — verify dist/index.html exists
+
+  ISSUE: Hero animation not playing / black screen in hero
+  ────────────────────────────────────────────────────────
+  Possible causes:
+    a) Frame images missing — verify public/assets/frames/ has 300 .webp files
+    b) Frames failed to load — check browser Network tab for 404 errors
+    c) Check Ctrl+Shift+E for "resource" type errors
+
+  ISSUE: Smooth scrolling not working
+  ───────────────────────────────────
+  Possible causes:
+    a) Lenis failed to initialise — check console for Lenis errors
+    b) GSAP ScrollTrigger conflict — ensure only one ScrollTrigger instance
+    c) CSS overflow-x: hidden on body may conflict
+
+  ISSUE: Video not playing
+  ────────────────────────
+  Possible causes:
+    a) Video files missing from public/assets/
+    b) Browser autoplay policy blocks unmuted video
+       (videos are set to muted + autoPlay by default)
+    c) Video codec not supported — MP4 H.264 required
+
+  ISSUE: Contact form not submitting
+  ──────────────────────────────────
+  Possible causes:
+    a) Network error — check internet connection
+    b) Formspree endpoint changed — verify URL in ContactSection.tsx
+       Current endpoint: https://formspree.io/f/mzdwqwpw
+    c) CORS error — Formspree handles CORS, check browser console
+
+  ISSUE: Fonts not loading / fallback fonts visible
+  ─────────────────────────────────────────────────
+  Possible causes:
+    a) Google Fonts CDN unreachable (blocked network/firewall)
+    b) Preconnect links missing in index.html <head>
+    c) Font family names misspelled in CSS
+
+  ISSUE: Mobile navigation not showing
+  ────────────────────────────────────
+  The hamburger menu only appears below 900px viewport width.
+  Check: browser DevTools responsive mode to simulate narrow screen.
+
+  ISSUE: 3D model not rendering
+  ─────────────────────────────
+  Possible causes:
+    a) WebGL not supported by browser
+    b) hero-model.glb/gltf missing from public/assets/
+    c) Three.js loading error — check console
+
+  ISSUE: Error log panel not opening
+  ──────────────────────────────────
+  Press Ctrl+Shift+E (or Cmd+Shift+E on Mac).
+  If still not working:
+    a) ErrorLogViewer component may not be mounted — verify App.tsx imports
+    b) Keyboard shortcut blocked by browser extension
+
+  ISSUE: Build warning "chunks larger than 500 kB"
+  ────────────────────────────────────────────────
+  This is a Vite warning, not an error. The JS bundle is large because
+  Three.js and all components are bundled together. To resolve:
+    - Use dynamic import() for heavy sections (Three.js, DashboardSection)
+    - Configure Vite rolldownOptions.output.codeSplitting
+
+  ISSUE: localStorage "QuotaExceededError"
+  ───────────────────────────────────────
+  The error logger stores up to 200 entries in localStorage.
+  If localStorage is full from other sites:
+    a) Clear browser storage for this domain
+    b) The error logger silently handles this — no crash will occur
+
+
+================================================================================
+12. ENVIRONMENT REQUIREMENTS
+================================================================================
+
+  DEVELOPMENT:
+    Node.js    : v18+ (v20+ recommended)
+    npm        : v9+ (or pnpm v8+)
+    OS         : Linux, macOS, or Windows
+
+  BROWSER SUPPORT:
+    Chrome     : 90+
+    Firefox    : 90+
+    Safari     : 15+
+    Edge       : 90+
+    Mobile     : iOS Safari 15+, Chrome Android 90+
+
+  REQUIRED BROWSER FEATURES:
+    - ES2020 JavaScript (modules, optional chaining, nullish coalescing)
+    - CSS clamp() function
+    - IntersectionObserver API
+    - WebGL 2.0 (for Three.js 3D rendering)
+    - HTML5 <video> with H.264 codec
+    - localStorage API
+    - Fetch API with Promises
+
+  NETWORK REQUIREMENTS:
+    - Google Fonts CDN access (fonts.googleapis.com)
+    - Formspree API access (formspree.io) for contact form
+    - No other external API calls
+
+
+================================================================================
+  END OF DOCUMENT
+================================================================================

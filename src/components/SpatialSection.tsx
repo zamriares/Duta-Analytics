@@ -150,7 +150,7 @@ function SpatialCard({ cap, idx }: { cap: typeof spatialCapabilities[0]; idx: nu
         </div>
       </div>
 
-      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.15rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "clamp(1rem, 2vw, 1.2rem)", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {cap.title}
       </h3>
 
@@ -593,7 +593,7 @@ export function SpatialSection() {
           <h2 className="section-title">
             Ground-Level & Agronomic Spatial Context for Every Site & Crop Block
           </h2>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem", lineHeight: 1.6 }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.92rem, 1.8vw, 1.15rem)", lineHeight: 1.6 }}>
             Bridge GIS mapping, plantation satellite imagery, crop source material polygon tracking, and indoor factory coordinates into a single unified spatial decision intelligence platform.
           </p>
         </div>
@@ -626,10 +626,10 @@ export function SpatialSection() {
               viewport={{ once: true }}
               transition={{ delay: 0.08 * idx }}
             >
-              <div style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", letterSpacing: "0.1em" }}>
+              <div style={{ fontSize: "clamp(0.68rem, 1.5vw, 0.78rem)", fontFamily: "var(--font-mono)", color: "var(--text-secondary)", letterSpacing: "0.1em" }}>
                 {p.label}
               </div>
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "6px" }}>
+              <div style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.45rem)", fontWeight: 800, fontFamily: "var(--font-heading)", marginTop: "6px" }}>
                 {p.val}
               </div>
             </motion.div>
@@ -658,10 +658,10 @@ export function SpatialSection() {
         >
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "16px" }}>
             <div>
-              <span className="section-eyebrow" style={{ fontSize: "0.75rem" }}>
+              <span className="section-eyebrow" style={{ fontSize: "clamp(0.68rem, 1.5vw, 0.75rem)" }}>
                 AGRONOMIC & CROP SOURCE MATERIAL SERVICES
               </span>
-              <h3 style={{ fontSize: "1.5rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginTop: "8px" }}>
+              <h3 style={{ fontSize: "clamp(1.15rem, 2.8vw, 1.55rem)", fontWeight: 700, fontFamily: "var(--font-heading)", marginTop: "8px" }}>
                 End-to-End Plantation GIS & Raw Material Traceability
               </h3>
             </div>

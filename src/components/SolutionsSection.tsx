@@ -90,7 +90,7 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
       </div>
 
       {/* ONLY TITLE VISIBLE BY DEFAULT */}
-      <h3 className="feature-title" style={{ margin: 0, fontSize: "1.2rem", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
+      <h3 className="feature-title" style={{ margin: 0, fontSize: "clamp(1.05rem, 2vw, 1.25rem)", fontWeight: 700, fontFamily: "var(--font-heading)" }}>
         {sol.title}
       </h3>
 
@@ -104,7 +104,7 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <p className="feature-desc" style={{ marginBottom: "14px", fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            <p className="feature-desc" style={{ marginBottom: "14px", fontSize: "clamp(0.85rem, 1.5vw, 0.92rem)", color: "var(--text-secondary)", lineHeight: 1.5 }}>
               {sol.desc}
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -115,7 +115,7 @@ function SolutionCard({ sol, idx }: { sol: typeof solutionCards[0]; idx: number 
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    fontSize: "0.85rem",
+                    fontSize: "clamp(0.78rem, 1.4vw, 0.85rem)",
                     color: "var(--text-primary)",
                     marginBottom: "8px",
                     fontFamily: "var(--font-mono)",
@@ -142,7 +142,7 @@ export function SolutionsSection() {
           <h2 className="section-title">
             Core Modules Built for Factory Scale
           </h2>
-          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "1.1rem" }}>
+          <p className="feature-desc" style={{ marginTop: "12px", fontSize: "clamp(0.92rem, 1.8vw, 1.15rem)" }}>
             Four interconnected engineering layers that transform raw operational signals into high-impact control room software.
           </p>
         </div>
@@ -157,7 +157,7 @@ export function SolutionsSection() {
         {/* Implementation Path Grid */}
         <div style={{ marginTop: "80px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">IMPLEMENTATION PATH</span>
-          <h3 className="section-title" style={{ fontSize: "2rem" }}>
+          <h3 className="section-title" style={{ fontSize: "clamp(1.35rem, 3.5vw, 2rem)" }}>
             From Scattered Data to Operational Decision Workflows
           </h3>
 
@@ -197,7 +197,7 @@ export function SolutionsSection() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 1.2, delay: 0.3 * idx + 0.15, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ fontSize: "1.8rem", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}
+                  style={{ fontSize: "clamp(1.3rem, 3vw, 1.8rem)", fontWeight: 800, fontFamily: "var(--font-mono)", color: "var(--accent-cyan)", marginBottom: "8px" }}
                 >
                   {st.step}
                 </motion.div>
@@ -206,7 +206,7 @@ export function SolutionsSection() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 1.2, delay: 0.3 * idx + 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ fontSize: "1.1rem", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}
+                  style={{ fontSize: "clamp(0.95rem, 2vw, 1.15rem)", fontWeight: 700, fontFamily: "var(--font-heading)", marginBottom: "8px" }}
                 >
                   {st.title}
                 </motion.h4>
@@ -215,7 +215,7 @@ export function SolutionsSection() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: false, amount: 0.3 }}
                   transition={{ duration: 1.2, delay: 0.3 * idx + 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  style={{ fontSize: "0.88rem", color: "var(--text-secondary)", margin: 0 }}
+                  style={{ fontSize: "clamp(0.82rem, 1.5vw, 0.9rem)", color: "var(--text-secondary)", margin: 0 }}
                 >
                   {st.text}
                 </motion.p>

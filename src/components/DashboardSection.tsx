@@ -78,7 +78,7 @@ function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: Me
         </button>
       </div>
 
-      <div style={{ fontSize: "2.4rem", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: valueColor || "var(--text-primary)" }}>
+      <div style={{ fontSize: "clamp(1.6rem, 3.8vw, 2.4rem)", fontWeight: 800, marginTop: "8px", fontFamily: "var(--font-heading)", color: valueColor || "var(--text-primary)" }}>
         {value}
       </div>
 
@@ -92,7 +92,7 @@ function InteractiveMetricCard({ label, value, secondary, icon, valueColor }: Me
             transition={{ duration: 0.25, ease: "easeOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div style={{ fontSize: "0.85rem", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
+            <div style={{ fontSize: "clamp(0.75rem, 1.8vw, 0.85rem)", color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontWeight: 600 }}>
               &rsaquo; {secondary}
             </div>
           </motion.div>
@@ -316,7 +316,7 @@ function AgenticAiTroubleshooter() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.25 }}
-          style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "24px" }}
+          style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "24px" }}
         >
           {/* Left Column: Root Cause & Action Plan */}
           <div style={{ background: "var(--bg-primary)", padding: "20px", borderRadius: "4px", border: "0.8px solid var(--border-subtle)" }}>

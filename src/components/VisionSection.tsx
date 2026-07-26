@@ -555,7 +555,7 @@ export function VisionSection() {
         {/* Vision Workflow Step-by-Step */}
         <div style={{ marginTop: "64px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">THE VISION WORKFLOW</span>
-          <h3 className="section-title" style={{ fontSize: "2rem" }}>
+          <h3 className="section-title" style={{ fontSize: "clamp(1.35rem, 3.5vw, 2rem)" }}>
             From Video Signals to Decision Action
           </h3>
 
@@ -576,7 +576,7 @@ export function VisionSection() {
                     background: "transparent",
                     border: "none",
                     borderBottom: "1px solid #666666",
-                    fontSize: "0.92rem",
+                    fontSize: "clamp(0.78rem, 1.8vw, 0.92rem)",
                     fontWeight: 700,
                     fontFamily: "var(--font-mono)",
                     color: "var(--text-primary)",
@@ -607,7 +607,7 @@ export function VisionSection() {
         {/* Target Operational Environments with Active Tabs & Explanation Text */}
         <div style={{ marginTop: "96px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">TARGET OPERATIONAL ENVIRONMENTS</span>
-          <h3 className="section-title" style={{ fontSize: "2rem", marginBottom: "24px" }}>
+          <h3 className="section-title" style={{ fontSize: "clamp(1.35rem, 3.5vw, 2rem)", marginBottom: "24px" }}>
             Proven Computer Vision AI Deployments Across Key Sectors
           </h3>
 
@@ -634,7 +634,7 @@ export function VisionSection() {
         {/* CCTV Comparison Grid */}
         <div style={{ marginTop: "64px", paddingTop: "48px", borderTop: "0.8px solid var(--border-subtle)" }}>
           <span className="section-eyebrow">ENTERPRISE A.I VISION VS TRADITIONAL CCTV</span>
-          <h3 className="section-title" style={{ fontSize: "1.8rem" }}>
+          <h3 className="section-title" style={{ fontSize: "clamp(1.2rem, 3vw, 1.8rem)" }}>
             Transforming Passive Recording into Active Operational AI
           </h3>
 
@@ -644,12 +644,12 @@ export function VisionSection() {
                 key={idx}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "24px",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                  gap: "16px 24px",
                   padding: "16px 24px",
                   background: idx % 2 === 0 ? "var(--bg-secondary)" : "var(--bg-primary)",
                   border: "0.8px solid var(--border-subtle)",
-                  fontSize: "0.9rem",
+                  fontSize: "clamp(0.82rem, 1.6vw, 0.9rem)",
                 }}
               >
                 <div style={{ color: "var(--text-secondary)", textDecoration: "line-through" }}>

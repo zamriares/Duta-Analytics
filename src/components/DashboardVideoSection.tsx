@@ -40,7 +40,7 @@ export function DashboardVideoSection() {
           <h2 className="section-title" style={{ fontSize: "clamp(2rem, 4vw, 3.2rem)", marginTop: "8px" }}>
             See Duta Analytics Control Room in Live Action
           </h2>
-          <p className="feature-desc" style={{ marginTop: "16px", fontSize: "1.15rem", color: "var(--text-secondary)" }}>
+          <p className="feature-desc" style={{ marginTop: "16px", fontSize: "clamp(0.92rem, 2vw, 1.15rem)", color: "var(--text-secondary)" }}>
             Watch real-time production telemetry, AI computer vision streams, and predictive maintenance alerts operate seamlessly across active factory sites.
           </p>
         </div>
@@ -72,14 +72,16 @@ export function DashboardVideoSection() {
               background: "var(--bg-secondary)",
               borderBottom: "1px solid var(--border-subtle)",
               fontFamily: "var(--font-mono)",
-              fontSize: "0.8rem",
+              fontSize: "clamp(0.68rem, 1.8vw, 0.8rem)",
+              flexWrap: "wrap",
+              gap: "8px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff5f56" }} />
-              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e" }} />
-              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27c93f" }} />
-              <span style={{ marginLeft: "12px", color: "var(--text-secondary)", fontWeight: 600 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", minWidth: 0 }}>
+              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ff5f56", flexShrink: 0 }} />
+              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ffbd2e", flexShrink: 0 }} />
+              <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#27c93f", flexShrink: 0 }} />
+              <span style={{ marginLeft: "8px", color: "var(--text-secondary)", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                 DUTA_ANALYTICS_CONTROL_ROOM_FEED.mp4
               </span>
             </div>

@@ -89,7 +89,7 @@ export function Hero() {
           className="hero-title"
           style={{
             fontFamily: "var(--font-heading)",
-            fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
+            fontSize: "clamp(1.75rem, 5.5vw, 4.5rem)",
             fontWeight: 800,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
@@ -105,7 +105,7 @@ export function Hero() {
           </span>
         </h1>
 
-        <p className="hero-subtitle" style={{ fontSize: "1.25rem", maxWidth: "820px", lineHeight: 1.6, marginBottom: "32px", color: "var(--text-secondary)" }}>
+        <p className="hero-subtitle" style={{ fontSize: "clamp(0.95rem, 2.2vw, 1.25rem)", maxWidth: "820px", lineHeight: 1.6, marginBottom: "32px", color: "var(--text-secondary)" }}>
           Delivering AI-powered Manufacturing Intelligence, Vision Intelligence, Digital Twins, and Spatial Analytics through a unified platform that connects people, machines, and data.
         </p>
 
