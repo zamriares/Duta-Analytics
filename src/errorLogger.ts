@@ -136,11 +136,8 @@ export function installGlobalErrorListeners(): void {
       if (!target || !target.tagName) return;
 
       const tag = target.tagName.toLowerCase();
-      const src =
-        (target as HTMLImageElement).src ||
-        (target as HTMLScriptElement).src ||
-        (target as HTMLLinkElement).href ||
-        "unknown";
+      const targetEl = target as HTMLElement & { src?: string; href?: string };
+      const src = targetEl.src || targetEl.href || "unknown";
 
       pushEntry({
         ...baseEntry("resource", `Failed to load <${tag}> resource: ${src}`),
