@@ -71,19 +71,42 @@ export function Hero() {
           paddingTop: "60px",
         }}
       >
-        <div className="hero-badge" style={{ marginBottom: "18px" }}>
-          <span>OPERATIONAL SAAS &bull; DUTA ANALYTICS</span>
+        <div
+          className="hero-badge"
+          style={{
+            marginBottom: "20px",
+            padding: "4px 0 8px 0",
+            background: "transparent",
+            border: "none",
+            borderBottom: "3.5px solid var(--accent-blue)",
+            display: "inline-flex",
+          }}
+        >
+          <span>ENGINEERING INTELLIGENT DECISIONS.</span>
         </div>
 
-        <h1 className="hero-title" style={{ fontSize: "clamp(2.4rem, 5vw, 4.2rem)", lineHeight: 1.1, marginBottom: "22px" }}>
-          <span style={{ display: "block" }}>Operational Intelligence</span>
-          <span style={{ display: "block", color: "var(--text-primary)" }}>
-            for Factory Control Rooms
+        <h1
+          className="hero-title"
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)",
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            marginBottom: "22px",
+            color: "#000000",
+          }}
+        >
+          <span style={{ display: "block" }}>
+            Transforming <span style={{ color: "#E69C00" }}>Industrial Data</span>
+          </span>
+          <span style={{ display: "block", color: "#000000" }}>
+            into Intelligent Decisions
           </span>
         </h1>
 
-        <p className="hero-subtitle" style={{ fontSize: "1.25rem", maxWidth: "760px", lineHeight: 1.6, marginBottom: "32px", color: "var(--text-secondary)" }}>
-          Convert production telemetry, AI computer vision, and spatial GIS into actionable decision workflows across physical sites.
+        <p className="hero-subtitle" style={{ fontSize: "1.25rem", maxWidth: "820px", lineHeight: 1.6, marginBottom: "32px", color: "var(--text-secondary)" }}>
+          Delivering AI-powered Manufacturing Intelligence, Vision Intelligence, Digital Twins, and Spatial Analytics through a unified platform that connects people, machines, and data.
         </p>
 
         <div className="hero-actions" style={{ display: "flex", gap: "16px" }}>
@@ -96,58 +119,61 @@ export function Hero() {
         </div>
       </div>
 
-      {/* CONSTANTLY VISIBLE Scroll Instruction Cue with Triple Stacked Blinking Arrowheads */}
+      {/* CONSTANTLY VISIBLE Scroll Instruction Cue Centered at Bottom */}
       <div
         style={{
           position: "absolute",
-          bottom: "44px",
-          left: "48px",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
           zIndex: 10,
           pointerEvents: "auto",
-          padding: "8px 12px",
         }}
       >
         <a
           href="#dashboard"
           className="hero-scroll-cue hero__scroll-btn hsbtn-in"
           style={{
-            fontSize: "1.05rem",
-            letterSpacing: "0.12em",
+            fontSize: "0.8rem",
+            letterSpacing: "0.14em",
             display: "inline-flex",
+            flexDirection: "column",
             alignItems: "center",
-            gap: "10px",
+            gap: "4px",
             textDecoration: "none",
           }}
         >
-          <span>scroll to start</span>
+          <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", fontWeight: 700 }}>
+            scroll to start
+          </span>
 
-          {/* 7 Stacked Black Arrowheads with Continuous Wave Blink */}
+          {/* Stacked Blinking Arrowheads */}
           <div
             style={{
               display: "inline-flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              height: "75px",
+              height: "45px",
             }}
           >
-            {[0, 1, 2, 3, 4, 5, 6].map((idx) => (
+            {[0, 1, 2, 3].map((idx) => (
               <motion.div
                 key={idx}
                 animate={{ opacity: [0.15, 1, 0.15] }}
                 transition={{
-                  duration: 1.4,
+                  duration: 1.3,
                   repeat: Infinity,
                   ease: "easeInOut",
-                  delay: idx * 0.14,
+                  delay: idx * 0.15,
                 }}
                 style={{
-                  marginTop: idx > 0 ? "-15px" : "0px",
+                  marginTop: idx > 0 ? "-11px" : "0px",
                   display: "flex",
                   alignItems: "center",
                 }}
               >
-                <ChevronDown size={24} color="#000000" strokeWidth={2.5} />
+                <ChevronDown size={20} color="var(--accent-blue)" strokeWidth={2.5} />
               </motion.div>
             ))}
           </div>
