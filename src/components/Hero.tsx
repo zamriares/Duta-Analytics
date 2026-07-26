@@ -6,7 +6,7 @@ import { HeroFrameCanvas } from "./HeroFrameCanvas";
 export function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
   const [scrollState, setScrollState] = useState({
-    frameIndex: 8,
+    frameIndex: 4,
     frameProgress: 0,
     frameOpacity: 1.0,
     textProgress: 0,

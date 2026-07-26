@@ -5,7 +5,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const TOTAL_FRAMES = 300;
-const START_FRAME_INDEX = 8; // Starts at frame_0009.webp (0-indexed: 8)
+const LOOP_START_INDEX = 4; // frame_0005.webp (0-indexed: 4)
+const LOOP_END_INDEX = 19;  // frame_0020.webp (0-indexed: 19)
 
 interface HeroFrameCanvasProps {
   onScrollProgress?: (data: {
@@ -23,7 +24,7 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
   const [loadedCount, setLoadedCount] = useState(0);
 
   useEffect(() => {
-    // Force manual scroll restoration so browser refresh always resets to top / frame_0009.webp
+    // Force manual scroll restoration so browser refresh always resets to top / frame_0005.webp
     if (typeof window !== "undefined") {
       if ("scrollRestoration" in window.history) {
         window.history.scrollRestoration = "manual";
@@ -44,8 +45,14 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
     const loadedImages: HTMLImageElement[] = [];
     imagesRef.current = loadedImages;
 
-    let currentFrameIndex = START_FRAME_INDEX;
-    let targetFrameIndex = START_FRAME_INDEX;
+    let isUserScrolling = false;
+    let loopIndex = LOOP_START_INDEX;
+    let loopDir = 1;
+    let lastLoopTime = 0;
+    const LOOP_INTERVAL_MS = 65; // ~15 FPS ping-pong loop speed
+
+    let currentFrameIndex = LOOP_START_INDEX;
+    let targetFrameIndex = LOOP_START_INDEX;
     let currentOpacity = 1.0;
 
     const renderFrame = (index: number, opacity: number = 1.0) => {
@@ -98,7 +105,7 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
 
     updateCanvasDimensions();
 
-    // 2. Preload 300 WebP frames, rendering frame_0009.webp (index 8) immediately
+    // 2. Preload 300 WebP frames, rendering frame_0005.webp (index 4) immediately
     let count = 0;
     for (let i = 1; i <= TOTAL_FRAMES; i++) {
       const img = new Image();
@@ -109,8 +116,8 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
         count++;
         setLoadedCount(count);
 
-        if (i === 9) {
-          renderFrame(START_FRAME_INDEX, 1.0);
+        if (i === 5) {
+          renderFrame(LOOP_START_INDEX, 1.0);
         }
       };
 
@@ -122,8 +129,8 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
     }
 
     // 3. Complete 3-Step Pinned Scroll Orchestration:
-    // Step 1 (0.00 -> 0.45): Image sequence plays frame_0009.webp -> frame_0300.webp. Text is HIDDEN.
-    // Step 2 (0.45 -> 0.80): WebP frames fade out to reveal dropping black dots background. Text REVEALS on top of dropping dots!
+    // Step 1 (0.00 -> 0.45): When idle, loops frame_0005 to frame_0020. On scroll down, continues frame_0020 -> frame_0300.
+    // Step 2 (0.45 -> 0.80): WebP frames fade out to reveal dropping black dots background. Text REVEALS on top!
     // Step 3 (0.80 -> 1.00): Smooth transition into Dashboard section.
     const trigger = ScrollTrigger.create({
       trigger: "#hero",
@@ -140,22 +147,22 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
         let textProgress = 0;
         let exitProgress = 0;
 
-        if (p === 0) {
+        if (p <= 0.001) {
+          isUserScrolling = false;
           frameProgress = 0;
-          targetFrameIndex = START_FRAME_INDEX;
-          currentFrameIndex = START_FRAME_INDEX;
           frameOpacity = 1.0;
           textProgress = 0;
           exitProgress = 0;
-          renderFrame(START_FRAME_INDEX, 1.0);
         } else if (p <= 0.45) {
-          // Step 1: WebP frame sequence
-          frameProgress = p / 0.45;
-          targetFrameIndex = START_FRAME_INDEX + Math.floor(frameProgress * (TOTAL_FRAMES - 1 - START_FRAME_INDEX));
+          isUserScrolling = true;
+          // Step 1: WebP frame sequence continues from frame_0020 -> frame_0300
+          frameProgress = (p - 0.001) / 0.449;
+          targetFrameIndex = LOOP_END_INDEX + Math.floor(frameProgress * (TOTAL_FRAMES - 1 - LOOP_END_INDEX));
           frameOpacity = 1.0;
           textProgress = 0;
           exitProgress = 0;
         } else if (p <= 0.80) {
+          isUserScrolling = true;
           // Step 2: WebP frames fade out to reveal dropping black dots background; Text heading reveals!
           frameProgress = 1.0;
           targetFrameIndex = TOTAL_FRAMES - 1;
@@ -163,6 +170,7 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
           textProgress = Math.min(1.0, (p - 0.45) / 0.20);   // Text reveals over dropping dots background
           exitProgress = 0;
         } else {
+          isUserScrolling = true;
           // Step 3: Transition to Dashboard section
           frameProgress = 1.0;
           targetFrameIndex = TOTAL_FRAMES - 1;
@@ -187,23 +195,41 @@ export function HeroFrameCanvas({ onScrollProgress }: HeroFrameCanvasProps) {
 
     ScrollTrigger.refresh();
 
-    // 4. Smooth LERP Animation Loop
+    // 4. Smooth Animation Loop handling Idle Ambient Ping-Pong (frames 5-20) and Active Scroll Transition
     let animationFrameId: number;
 
-    const animateLoop = () => {
-      const diff = targetFrameIndex - currentFrameIndex;
-      if (Math.abs(diff) > 0.001 || Math.abs(currentOpacity) > 0.001) {
-        currentFrameIndex += diff * 0.25;
-        const clampedIndex = Math.min(
-          TOTAL_FRAMES - 1,
-          Math.max(START_FRAME_INDEX, Math.round(currentFrameIndex))
-        );
-        renderFrame(clampedIndex, currentOpacity);
+    const animateLoop = (timestamp: number) => {
+      if (!isUserScrolling) {
+        if (timestamp - lastLoopTime > LOOP_INTERVAL_MS) {
+          lastLoopTime = timestamp;
+          loopIndex += loopDir;
+          if (loopIndex >= LOOP_END_INDEX) {
+            loopIndex = LOOP_END_INDEX;
+            loopDir = -1;
+          } else if (loopIndex <= LOOP_START_INDEX) {
+            loopIndex = LOOP_START_INDEX;
+            loopDir = 1;
+          }
+        }
+        currentFrameIndex = loopIndex;
+        renderFrame(Math.round(loopIndex), currentOpacity);
+      } else {
+        const diff = targetFrameIndex - currentFrameIndex;
+        if (Math.abs(diff) > 0.001 || Math.abs(currentOpacity) > 0.001) {
+          currentFrameIndex += diff * 0.25;
+          const clampedIndex = Math.min(
+            TOTAL_FRAMES - 1,
+            Math.max(LOOP_START_INDEX, Math.round(currentFrameIndex))
+          );
+          renderFrame(clampedIndex, currentOpacity);
+        }
+        // Keep loopIndex synced to current position so it resumes smoothly if scroll returns to top
+        loopIndex = Math.min(LOOP_END_INDEX, Math.max(LOOP_START_INDEX, Math.round(currentFrameIndex)));
       }
       animationFrameId = requestAnimationFrame(animateLoop);
     };
 
-    animateLoop();
+    animationFrameId = requestAnimationFrame(animateLoop);
 
     // 5. Window Resize Handler
     const handleResize = () => {
