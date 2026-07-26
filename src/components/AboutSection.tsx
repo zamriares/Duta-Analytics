@@ -1,14 +1,22 @@
 import { motion } from "framer-motion";
-import { CheckCircle2 } from "lucide-react";
+import {
+  Eye,
+  Clock,
+  ShieldCheck,
+  Cpu,
+  MapPin,
+  BarChart3,
+  Sparkles,
+} from "lucide-react";
 
 const focusAreas = [
-  "Production visibility",
-  "Downtime response",
-  "Quality monitoring",
-  "Asset status",
-  "Geospatial context",
-  "Management reporting",
-  "AI-assisted analysis",
+  { label: "Production visibility", icon: Eye },
+  { label: "Downtime response", icon: Clock },
+  { label: "Quality monitoring", icon: ShieldCheck },
+  { label: "Asset status", icon: Cpu },
+  { label: "Geospatial context", icon: MapPin },
+  { label: "Management reporting", icon: BarChart3 },
+  { label: "AI-assisted analysis", icon: Sparkles },
 ];
 
 const operatingPrinciples = [
@@ -54,25 +62,38 @@ export function AboutSection() {
 
           <div style={{ marginTop: "28px" }}>
             <span className="section-eyebrow" style={{ fontSize: "0.7rem" }}>CORE FOCUS AREAS</span>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "12px", marginTop: "12px" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "12px" }}>
               {focusAreas.map((f) => (
-                <span
-                  key={f}
+                <motion.span
+                  key={f.label}
+                  whileHover={{
+                    scale: 1.06,
+                    y: -2,
+                    backgroundColor: "rgba(255, 255, 255, 0.05)",
+                  }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 17,
+                  }}
                   style={{
-                    padding: "6px 14px",
-                    background: "var(--bg-primary)",
-                    border: "0.8px solid var(--border-subtle)",
+                    padding: "8px 16px",
+                    background: "transparent",
+                    border: "none",
                     fontSize: "0.85rem",
                     fontWeight: 600,
-                    borderRadius: "4px",
+                    borderRadius: "6px",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "6px",
+                    gap: "8px",
+                    cursor: "pointer",
+                    color: "var(--text-primary)",
                   }}
                 >
-                  <CheckCircle2 size={14} color="var(--accent-blue)" />
-                  {f}
-                </span>
+                  <f.icon size={16} color="var(--accent-blue)" style={{ flexShrink: 0 }} />
+                  {f.label}
+                </motion.span>
               ))}
             </div>
           </div>
